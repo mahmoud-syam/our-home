@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>شقة م. محمود صيام</title>
+<meta name="theme-color" content="#6C7350">
+<meta name="description" content="التصميم الداخلي لشقة م. محمود صيام: موديل 3D ومسقط بالعفش وتفاصيل كل غرفة.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="شقتي">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: an architect's presentation sheet — title block, live 3D model, furnished plan, then a room-by-room schedule. */
+:root{
+  --paper:#F3F0EA; --panel:#FBFAF7; --ink:#25221E; --muted:#756D63; --line:#DCD4C8;
+  --oak:#A9784A; --olive:#6C7350; --poche:#2E2A26;
+  --display:"Readex Pro", "IBM Plex Sans Arabic", Tahoma, sans-serif;
+  --body:"IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --paper:#1C1A17; --panel:#24211D; --ink:#EEE8DF; --muted:#A99F92; --line:#3A352F; --oak:#CF9C69; --olive:#9AA27A; --poche:#E8E1D6; color-scheme: dark; }
+}
+:root[data-theme="dark"]{ --paper:#1C1A17; --panel:#24211D; --ink:#EEE8DF; --muted:#A99F92; --line:#3A352F; --oak:#CF9C69; --olive:#9AA27A; --poche:#E8E1D6; color-scheme: dark; }
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.7}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.25}
+h2{font-size:1.5rem;font-weight:600}
+h3{font-size:1.1rem;font-weight:600}
+.num{font-variant-numeric:tabular-nums}
+a{color:var(--oak)}
+
+/* title block */
+.title{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;padding:36px 0 22px;border-bottom:2px solid var(--ink)}
+.title h1{font-size:clamp(1.8rem,4.6vw,2.9rem);font-weight:700;letter-spacing:-.01em}
+.title p{margin:.35rem 0 0;color:var(--muted);max-width:60ch}
+.sheet{display:grid;grid-template-columns:repeat(2,auto);gap:2px 18px;font-size:.82rem;color:var(--muted);text-align:left;direction:ltr}
+.sheet b{color:var(--ink);font-weight:600}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}
+.fact{padding:14px 0 16px;border-inline-start:1px solid var(--line);padding-inline-start:16px}
+.fact:first-child{border-inline-start:0;padding-inline-start:0}
+.fact .v{font-family:var(--display);font-size:1.55rem;font-weight:600}
+.fact .v small{font-size:.8rem;color:var(--muted);font-weight:400;margin-inline-start:4px}
+.fact .k{font-size:.82rem;color:var(--muted)}
+
+section{padding:40px 0 8px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.sec-head p{margin:0;color:var(--muted);font-size:.92rem}
+
+/* viewer */
+.viewer{position:relative;height:min(74vh,720px);min-height:460px;border-radius:14px;overflow:hidden;background:#E9E4DB;border:1px solid var(--line)}
+.viewer canvas{display:block;touch-action:none}
+.v-top{position:absolute;inset-inline:12px;top:12px;display:flex;gap:8px;flex-wrap:wrap;z-index:5;pointer-events:none}
+.v-top>*{pointer-events:auto}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;max-width:100%;padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip,.tbtn{font:500 .85rem var(--body);border:1px solid rgba(37,34,30,.15);background:rgba(251,250,247,.9);color:#25221E;border-radius:999px;padding:6px 13px;white-space:nowrap;cursor:pointer;backdrop-filter:blur(6px)}
+.chip[aria-pressed="true"]{background:#25221E;color:#F3F0EA;border-color:#25221E}
+.tbtn[aria-pressed="true"]{background:#6C7350;color:#fff;border-color:#6C7350}
+.chip:focus-visible,.tbtn:focus-visible,.seg button:focus-visible{outline:2px solid var(--oak);outline-offset:2px}
+.v-bottom{position:absolute;inset-inline:12px;bottom:12px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;z-index:5;pointer-events:none}
+.v-bottom>*{pointer-events:auto}
+.tools{display:flex;gap:6px;flex-wrap:wrap}
+.info{background:rgba(251,250,247,.95);color:#25221E;border-radius:12px;padding:10px 14px;font-size:.88rem;max-width:300px;box-shadow:0 6px 24px rgba(0,0,0,.12)}
+.info b{display:block;font-family:var(--display);font-size:.98rem}
+.info span{color:#756D63}
+.hint{font-size:.78rem;color:#756D63;background:rgba(251,250,247,.85);padding:4px 10px;border-radius:999px;align-self:flex-end}
+.rlabel{font:600 12px var(--body);color:#25221E;background:rgba(251,250,247,.88);border-radius:6px;padding:2px 7px;white-space:nowrap;text-align:center;line-height:1.35;pointer-events:none}
+.rlabel small{display:block;font-weight:400;color:#756D63;font-size:10.5px}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:#756D63;font-size:.95rem}
+
+/* plan */
+.plan-box{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;overflow-x:auto}
+.plan-box svg{display:block;width:100%;height:auto;min-width:520px;max-height:88vh}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--panel)}
+.seg button{font:500 .85rem var(--body);border:0;background:transparent;color:var(--muted);padding:5px 14px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+/* modifications */
+.mods{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mod{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.mod svg{width:100%;height:auto;display:block}
+.mod h3{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.pill{font:600 .72rem var(--body);padding:2px 9px;border-radius:999px;border:1px solid currentColor}
+.pill.before{color:var(--muted)} .pill.after{color:var(--olive)}
+.mod ul{margin:.5rem 0 0;padding-inline-start:1.1rem;color:var(--muted);font-size:.9rem}
+
+/* rooms */
+.rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.room{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.room header{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.room .dim{font-size:.82rem;color:var(--muted);direction:ltr;unicode-bidi:isolate}
+.room .area{font-family:var(--display);font-weight:600;color:var(--oak);white-space:nowrap}
+.room p{margin:0;font-size:.93rem;max-width:65ch}
+.room ul{margin:0;padding-inline-start:1.1rem;font-size:.9rem;color:var(--muted)}
+.room .fin{font-size:.84rem;border-top:1px dashed var(--line);padding-top:8px;color:var(--muted)}
+.room .fin b{color:var(--ink);font-weight:600}
+.room button{align-self:flex-start;font:500 .82rem var(--body);background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:4px 12px;cursor:pointer}
+.room button:hover{border-color:var(--oak)}
+
+/* palette */
+.palette{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:12px}
+.sw{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
+.sw i{display:block;height:64px}
+.sw div{padding:8px 10px;font-size:.84rem}
+.sw div span{display:block;color:var(--muted);font-size:.76rem}
+
+.notes{background:var(--panel);border:1px solid var(--line);border-inline-start:4px solid var(--oak);border-radius:10px;padding:14px 18px}
+.notes ol{margin:0;padding-inline-start:1.2rem;font-size:.93rem}
+.notes li{margin:.25rem 0}
+footer{padding:36px 0 48px;color:var(--muted);font-size:.82rem}
+
+@media (max-width:760px){
+  .title{grid-template-columns:1fr}
+  .sheet{text-align:right;direction:rtl}
+  .fact .v{font-size:1.3rem}
+  .mods{grid-template-columns:1fr}
+  .viewer{height:72vh;min-height:440px}
+}
+@media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto!important} }
+</style>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+</script>
+</head>
+<body>
+<div class="wrap">
+  <header class="title">
+    <div>
+      <h1>شقة م. محمود صيام</h1>
+      <p>مشروع تصميم داخلي كامل بستايل مودرن دافي: قفل المسقط وتوسيع المطبخ وقفله بحيطة، وشيل الطرقة اللي جوه أوضة النوم، وتوزيع العفش لكل الغرف، مع موديل 3D تقدر تلف فيه وتدخل كل أوضة.</p>
+    </div>
+    <div class="sheet num">
+      <span>Project</span><b>Syam Residence</b>
+      <span>Style</span><b>Warm Modern</b>
+      <span>Ceiling</span><b>3.00 m</b>
+      <span>Units</span><b>mm</b>
+    </div>
+  </header>
+  <div class="facts num" id="facts"></div>
+
+  <section id="model3d">
+    <div class="sec-head">
+      <h2>الموديل ثلاثي الأبعاد</h2>
+      <p>اسحب للف، اقرص أو اسكرول للتقريب، ودوس على أي قطعة عفش تعرف هي إيه.</p>
+    </div>
+    <div class="viewer" id="viewer">
+      <div class="loading" id="loading">جاري تحميل الموديل…</div>
+      <div class="v-top">
+        <div class="chips" id="roomChips" role="toolbar" aria-label="اختيار الغرفة"></div>
+      </div>
+      <div class="v-bottom">
+        <div class="tools">
+          <button class="tbtn" id="btnInside" aria-pressed="false">منظور من جوه</button>
+          <button class="tbtn" id="btnCut" aria-pressed="true">قص الحيطان</button>
+          <button class="tbtn" id="btnTop" aria-pressed="false">مسقط من فوق</button>
+          <button class="tbtn" id="btnNight" aria-pressed="false">إضاءة ليل</button>
+          <button class="tbtn" id="btnLabels" aria-pressed="true">أسماء الغرف</button>
+        </div>
+        <div class="info" id="info" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="plan">
+    <div class="sec-head">
+      <h2>المسقط الأفقي بالعفش</h2>
+      <div class="seg" role="group" aria-label="عرض المسقط">
+        <button id="pAfter" aria-pressed="true">بعد التعديل</button>
+        <button id="pBefore" aria-pressed="false">الأصلي</button>
+      </div>
+    </div>
+    <div class="plan-box"><svg id="planSvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="مسقط الشقة بالعفش"></svg></div>
+  </section>
+
+  <section id="mods">
+    <div class="sec-head"><h2>التعديلات المعمارية</h2><p>المطبخ والمسقط، وغرفة النوم، قبل وبعد.</p></div>
+    <div class="mods">
+      <div class="mod">
+        <h3>المطبخ والمسقط <span class="pill before">الأصلي</span></h3>
+        <svg id="modBefore" xmlns="http://www.w3.org/2000/svg"></svg>
+        <ul>
+          <li>المطبخ شريط عرضه <span class="num">1.32</span> م بس، مفتوح على الطرقة.</li>
+          <li>المسقط مفتوح بطول المطبخ كله: <span class="num">0.90 × 3.47</span> م.</li>
+        </ul>
+      </div>
+      <div class="mod">
+        <h3>المطبخ والمسقط <span class="pill after">بعد التعديل</span></h3>
+        <svg id="modAfter" xmlns="http://www.w3.org/2000/svg"></svg>
+        <ul>
+          <li>المسقط اتسقف واتضم للمطبخ، وفضل منه <span class="num">0.85 × 0.80</span> م جنب حيطة الحمام للتهوية.</li>
+          <li>عرض المطبخ بقى <span class="num">2.17</span> م، ومساحته <span class="num">6.7</span> م² بدل <span class="num">4.6</span> م².</li>
+          <li>المطبخ اتقفل عن الطرقة بحيطة، والباب <span class="num">80</span> سم جنب لوبي الحمام.</li>
+        </ul>
+      </div>
+      <div class="mod">
+        <h3>غرفة النوم <span class="pill before">الأصلي</span></h3>
+        <svg id="modBedBefore" xmlns="http://www.w3.org/2000/svg"></svg>
+        <ul>
+          <li>طرقة مبنية جوه الأوضة عمقها <span class="num">0.95</span> م، والباب في آخرها ناحية الحيطة الخارجية.</li>
+          <li>الأوضة نفسها <span class="num">3.31 × 4.90</span> م.</li>
+        </ul>
+      </div>
+      <div class="mod">
+        <h3>غرفة النوم <span class="pill after">بعد التعديل</span></h3>
+        <svg id="modBedAfter" xmlns="http://www.w3.org/2000/svg"></svg>
+        <ul>
+          <li>الطرقة اتشالت ودخلت في الأوضة، فبقت <span class="num">3.31 × 5.90</span> م (<span class="num">19.5</span> م²).</li>
+          <li>الباب بقى جنب حيطة المطبخ، والدولاب على الحيطة اليمين، والتسريحة على الحيطة اللي جنب الباب.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="rooms">
+    <div class="sec-head"><h2>تفاصيل كل غرفة</h2><p>المقاسات صافي من وش الحيطة.</p></div>
+    <div class="rooms" id="roomCards"></div>
+  </section>
+
+  <section id="materials">
+    <div class="sec-head"><h2>الخامات والألوان</h2><p>باليتة واحدة ماشية في الشقة كلها.</p></div>
+    <div class="palette" id="palette"></div>
+  </section>
+
+  <section id="notes">
+    <div class="sec-head"><h2>ملاحظات قبل التنفيذ</h2></div>
+    <div class="notes">
+      <ol>
+        <li>أماكن شبابيك غرفة النوم وأوضة الأطفال مش مرسومة في ملف الأوتوكاد، فحطيتها على الواجهة. لو مكانها مختلف، توزيع العفش في الغرفتين ممكن يتغير.</li>
+        <li>قبل فك حيطة المطبخ القديمة ناحية المسقط، لازم مهندس إنشائي يتأكد إنها مش حاملة.</li>
+        <li>الحوض اتحط على الحيطة الجديدة جنب المسقط عشان يفضل قريب من مواسير الصرف. اتأكد من مسار الصرف والميول قبل التنفيذ.</li>
+        <li>المسقط المتبقي (<span class="num">85 × 80</span> سم) لازم يفضل مفتوح لفوق، أو يتركب فيه شفاط تهوية، لأن شفاط المطبخ وشباكه الصغير بيطلعوا عليه، ودول التهوية الوحيدة للمطبخ بعد ما اتقفل.</li>
+        <li>الحيطان مرسومة في الـDWG بسمك <span class="num">5</span> سم. في الموديل استخدمت <span class="num">20</span> سم للخارجي و<span class="num">10</span> سم للداخلي، وارتفاع سقف <span class="num">3.00</span> م.</li>
+      </ol>
+    </div>
+  </section>
+  <footer>المسقط الأصلي: م. محمد راشدي، <span class="num">14/12/2025</span>. التصميم الداخلي والموديل مبنيين على نفس أبعاد ملف الأوتوكاد.</footer>
+</div>
+
+<script id="data" type="application/json">{"H": 3000, "before": {"walls": [{"x0": -150, "y0": 11900, "x1": 8290, "y1": 12100, "h": 3000, "kind": "ext"}, {"x0": -150, "y0": 2350, "x1": 50, "y1": 6000, "h": 3000, "kind": "ext"}, {"x0": -150, "y0": 6000, "x1": 50, "y1": 11900, "h": 1050, "kind": "parapet"}, {"x0": -150, "y0": 2350, "x1": 3780, "y1": 2550, "h": 3000, "kind": "ext"}, {"x0": 4580, "y0": 2350, "x1": 4730, "y1": 2550, "h": 3000, "kind": "ext"}, {"x0": 4530, "y0": -150, "x1": 4730, "y1": 2350, "h": 3000, "kind": "ext"}, {"x0": 4530, "y0": -150, "x1": 8290, "y1": 50, "h": 3000, "kind": "ext"}, {"x0": 950, "y0": 6000, "x1": 1000, "y1": 9955, "h": 3000, "kind": "wall"}, {"x0": 950, "y0": 10950, "x1": 1000, "y1": 11900, "h": 3000, "kind": "wall"}, {"x0": 50, "y0": 5950, "x1": 3630, "y1": 6000, "h": 3000, "kind": "wall"}, {"x0": 4630, "y0": 5950, "x1": 4780, "y1": 6000, "h": 3000, "kind": "wall"}, {"x0": 4730, "y0": 5950, "x1": 4780, "y1": 11900, "h": 3000, "kind": "wall"}, {"x0": 3000, "y0": 2550, "x1": 3050, "y1": 5054, "h": 3000, "kind": "wall"}, {"x0": 3000, "y0": 5850, "x1": 3050, "y1": 5950, "h": 3000, "kind": "wall"}, {"x0": 5820, "y0": 5950, "x1": 8090, "y1": 6000, "h": 3000, "kind": "wall"}, {"x0": 5675, "y0": 2430, "x1": 8090, "y1": 2480, "h": 3000, "kind": "wall"}, {"x0": 4730, "y0": 2430, "x1": 4830, "y1": 2530, "h": 3000, "kind": "wall"}, {"x0": 5840, "y0": 50, "x1": 5890, "y1": 1566, "h": 3000, "kind": "wall"}, {"x0": 5840, "y0": 2364, "x1": 5890, "y1": 2430, "h": 3000, "kind": "wall"}, {"x0": 4780, "y0": 6950, "x1": 7035, "y1": 7000, "h": 3000, "kind": "wall"}, {"x0": 7990, "y0": 6950, "x1": 8090, "y1": 7000, "h": 3000, "kind": "wall"}, {"x0": 7190, "y0": 2480, "x1": 7240, "y1": 5950, "h": 3000, "kind": "wall"}, {"x0": 8090, "y0": -150, "x1": 8290, "y1": 2480, "h": 3000, "kind": "ext"}, {"x0": 8090, "y0": 5950, "x1": 8290, "y1": 12100, "h": 3000, "kind": "ext"}], "doors": [{"id": "main", "label": "باب الشقة", "axis": "x", "a": 3780, "b": 4580, "c": 2450, "t": 200, "hinge": [3780, 2550], "dir": 1, "leaf": 800}, {"id": "kids", "label": "باب أوضة الأطفال", "axis": "y", "a": 5054, "b": 5850, "c": 3025, "t": 50, "hinge": [3000, 5850], "dir": -1, "leaf": 796}, {"id": "bath", "label": "باب الحمام", "axis": "y", "a": 1566, "b": 2364, "c": 5865, "t": 50, "hinge": [5890, 2364], "dir": 1, "leaf": 798}, {"id": "balc", "label": "باب البلكونة", "axis": "y", "a": 9955, "b": 10950, "c": 975, "t": 50, "hinge": [950, 9955], "dir": -1, "leaf": 995, "double": true}, {"id": "bed", "axis": "x", "a": 7035, "b": 7990, "c": 6975, "t": 50, "hinge": [7990, 7000], "dir": 1, "leaf": 900}], "passages": [{"axis": "x", "a": 3630, "b": 4630, "c": 5975, "t": 50, "top": 2400}, {"axis": "x", "a": 4780, "b": 5820, "c": 5975, "t": 50, "top": 2400}, {"axis": "x", "a": 4830, "b": 5675, "c": 2455, "t": 100, "top": 2400}], "rooms": [{"id": "reception", "name": "الريسبشن", "en": "Reception", "poly": [[1000, 6000], [4730, 6000], [4730, 11900], [1000, 11900]], "floor": "tile", "cam": {"pos": [4100, 7400, 1700], "tgt": [2500, 11000, 700]}, "area": 22.0}, {"id": "bedroom", "name": "غرفة النوم", "poly": [[4780, 7000], [8090, 7000], [8090, 11900], [4780, 11900]], "floor": "wood", "area": 16.2}, {"id": "passage", "name": "طرقة النوم", "poly": [[4780, 6000], [8090, 6000], [8090, 6950], [4780, 6950]], "floor": "tile", "area": 3.1}, {"id": "kids", "name": "أوضة الأطفال", "en": "Kids room", "poly": [[50, 2550], [3000, 2550], [3000, 5950], [50, 5950]], "floor": "wood", "cam": {"pos": [2700, 5450, 1650], "tgt": [1300, 2700, 600]}, "area": 10.0}, {"id": "kitchen", "name": "المطبخ", "poly": [[5870, 2480], [7190, 2480], [7190, 5950], [5870, 5950]], "floor": "tile", "area": 4.6}, {"id": "hall", "name": "الطرقة / المدخل", "poly": [[3050, 2550], [5870, 2550], [5870, 5950], [3050, 5950]], "floor": "tile", "area": 9.6}, {"id": "bath", "name": "الحمام", "en": "Bathroom", "poly": [[5890, 50], [8090, 50], [8090, 2430], [5890, 2430]], "floor": "bath", "cam": {"pos": [6100, 2250, 1750], "tgt": [7100, 200, 700]}, "area": 5.2}, {"id": "lobby", "name": "لوبي الحمام", "en": "Lobby", "poly": [[4730, 50], [5840, 50], [5840, 2430], [4730, 2430]], "floor": "tile", "cam": {"pos": [5300, 2900, 1650], "tgt": [5300, 200, 900]}, "area": 2.6}, {"id": "balcony", "name": "البلكونة", "en": "Balcony", "poly": [[50, 6000], [950, 6000], [950, 11900], [50, 11900]], "floor": "deck", "cam": {"pos": [700, 6300, 1650], "tgt": [400, 11500, 700]}, "area": 5.3}, {"id": "shaft", "name": "المسقط (مفتوح)", "poly": [[7240, 2480], [8290, 2480], [8290, 5950], [7240, 5950]], "floor": "none", "area": 3.6}]}, "walls": [{"x0": -150, "y0": 11900, "x1": 8290, "y1": 12100, "h": 3000, "kind": "ext"}, {"x0": -150, "y0": 2350, "x1": 50, "y1": 6000, "h": 3000, "kind": "ext"}, {"x0": -150, "y0": 6000, "x1": 50, "y1": 11900, "h": 1050, "kind": "parapet"}, {"x0": -150, "y0": 2350, "x1": 3780, "y1": 2550, "h": 3000, "kind": "ext"}, {"x0": 4580, "y0": 2350, "x1": 4730, "y1": 2550, "h": 3000, "kind": "ext"}, {"x0": 4530, "y0": -150, "x1": 4730, "y1": 2350, "h": 3000, "kind": "ext"}, {"x0": 4530, "y0": -150, "x1": 8290, "y1": 50, "h": 3000, "kind": "ext"}, {"x0": 8090, "y0": -150, "x1": 8290, "y1": 12100, "h": 3000, "kind": "ext"}, {"x0": 950, "y0": 6000, "x1": 1000, "y1": 9955, "h": 3000, "kind": "wall"}, {"x0": 950, "y0": 10950, "x1": 1000, "y1": 11900, "h": 3000, "kind": "wall"}, {"x0": 50, "y0": 5950, "x1": 3630, "y1": 6000, "h": 3000, "kind": "wall"}, {"x0": 4630, "y0": 5950, "x1": 4780, "y1": 6000, "h": 3000, "kind": "wall"}, {"x0": 4730, "y0": 5950, "x1": 4780, "y1": 11900, "h": 3000, "kind": "wall"}, {"x0": 3000, "y0": 2550, "x1": 3050, "y1": 5054, "h": 3000, "kind": "wall"}, {"x0": 3000, "y0": 5850, "x1": 3050, "y1": 5950, "h": 3000, "kind": "wall"}, {"x0": 5820, "y0": 5950, "x1": 8090, "y1": 6000, "h": 3000, "kind": "wall"}, {"x0": 4780, "y0": 5950, "x1": 4920, "y1": 6000, "h": 3000, "kind": "wall"}, {"x0": 5820, "y0": 2480, "x1": 5920, "y1": 2530, "h": 3000, "kind": "wall"}, {"x0": 5820, "y0": 3330, "x1": 5920, "y1": 5950, "h": 3000, "kind": "wall"}, {"x0": 5675, "y0": 2430, "x1": 8090, "y1": 2480, "h": 3000, "kind": "wall"}, {"x0": 4730, "y0": 2430, "x1": 4830, "y1": 2530, "h": 3000, "kind": "wall"}, {"x0": 5840, "y0": 50, "x1": 5890, "y1": 1566, "h": 3000, "kind": "wall"}, {"x0": 5840, "y0": 2364, "x1": 5890, "y1": 2430, "h": 3000, "kind": "wall"}, {"x0": 7190, "y0": 2480, "x1": 7240, "y1": 3380, "h": 3000, "kind": "wall"}, {"x0": 7190, "y0": 3280, "x1": 8090, "y1": 3380, "h": 3000, "kind": "wall"}], "cols": [{"x0": 950, "y0": 9386, "x1": 1086, "y1": 9549}, {"x0": 950, "y0": 11183, "x1": 1086, "y1": 11345}, {"x0": 4644, "y0": 9386, "x1": 4780, "y1": 9549}, {"x0": 4644, "y0": 11183, "x1": 4780, "y1": 11345}, {"x0": 8004, "y0": 9386, "x1": 8090, "y1": 9549}, {"x0": 8004, "y0": 11183, "x1": 8090, "y1": 11345}], "doors": [{"id": "main", "label": "باب الشقة", "axis": "x", "a": 3780, "b": 4580, "c": 2450, "t": 200, "hinge": [3780, 2550], "dir": 1, "leaf": 800}, {"id": "kids", "label": "باب أوضة الأطفال", "axis": "y", "a": 5054, "b": 5850, "c": 3025, "t": 50, "hinge": [3000, 5850], "dir": -1, "leaf": 796}, {"id": "bath", "label": "باب الحمام", "axis": "y", "a": 1566, "b": 2364, "c": 5865, "t": 50, "hinge": [5890, 2364], "dir": 1, "leaf": 798}, {"id": "balc", "label": "باب البلكونة", "axis": "y", "a": 9955, "b": 10950, "c": 975, "t": 50, "hinge": [950, 9955], "dir": -1, "leaf": 995, "double": true}, {"id": "bed", "label": "باب النوم", "axis": "x", "a": 4920, "b": 5820, "c": 5975, "t": 50, "hinge": [5820, 6000], "dir": 1, "leaf": 900}, {"id": "kit", "label": "باب المطبخ", "axis": "y", "a": 2530, "b": 3330, "c": 5870, "t": 100, "hinge": [5920, 2530], "dir": 1, "leaf": 800}], "passages": [{"axis": "x", "a": 3630, "b": 4630, "c": 5975, "t": 50, "top": 2400}, {"axis": "x", "a": 4830, "b": 5675, "c": 2455, "t": 100, "top": 2400}], "windows": [{"id": "w_rec", "label": "شباك الريسبشن", "axis": "x", "a": 2314, "b": 3360, "c": 12000, "t": 200, "sill": 900, "top": 2400}, {"id": "w_bed", "label": "شباك النوم (افتراضي)", "axis": "x", "a": 5835, "b": 7035, "c": 12000, "t": 200, "sill": 900, "top": 2400, "assumed": true}, {"id": "w_kid", "label": "شباك الأطفال (افتراضي)", "axis": "y", "a": 3650, "b": 4850, "c": -50, "t": 200, "sill": 900, "top": 2400, "assumed": true}, {"id": "w_kit", "label": "شباك المطبخ على المسقط", "axis": "x", "a": 7390, "b": 7990, "c": 3330, "t": 100, "sill": 1250, "top": 2100}, {"id": "w_lob", "label": "شباك اللوبي", "axis": "x", "a": 5290, "b": 5790, "c": -50, "t": 200, "sill": 1500, "top": 2100}, {"id": "w_bath", "label": "شباك الحمام بشفاط", "axis": "x", "a": 6400, "b": 7000, "c": -50, "t": 200, "sill": 1500, "top": 2100}], "rooms": [{"id": "reception", "name": "الريسبشن", "en": "Reception", "poly": [[1000, 6000], [4730, 6000], [4730, 11900], [1000, 11900]], "floor": "tile", "cam": {"pos": [4100, 7400, 1700], "tgt": [2500, 11000, 700]}, "area": 22.0}, {"id": "bedroom", "name": "غرفة النوم الرئيسية", "en": "Master bedroom", "poly": [[4780, 6000], [8090, 6000], [8090, 11900], [4780, 11900]], "floor": "wood", "cam": {"pos": [5500, 11550, 1750], "tgt": [7300, 6600, 800]}, "area": 19.5}, {"id": "kids", "name": "أوضة الأطفال", "en": "Kids room", "poly": [[50, 2550], [3000, 2550], [3000, 5950], [50, 5950]], "floor": "wood", "cam": {"pos": [2700, 5450, 1650], "tgt": [1300, 2700, 600]}, "area": 10.0}, {"id": "kitchen", "name": "المطبخ", "en": "Kitchen", "poly": [[5920, 2480], [7190, 2480], [7190, 3380], [8090, 3380], [8090, 5950], [5920, 5950]], "floor": "tile", "cam": {"pos": [6750, 3250, 1700], "tgt": [7000, 5900, 900]}, "area": 6.7}, {"id": "hall", "name": "الطرقة / المدخل", "en": "Hall", "poly": [[3050, 2550], [5820, 2550], [5820, 5950], [3050, 5950]], "floor": "tile", "cam": {"pos": [4100, 2850, 1650], "tgt": [5200, 5800, 1200]}, "area": 9.4}, {"id": "bath", "name": "الحمام", "en": "Bathroom", "poly": [[5890, 50], [8090, 50], [8090, 2430], [5890, 2430]], "floor": "bath", "cam": {"pos": [6100, 2250, 1750], "tgt": [7100, 200, 700]}, "area": 5.2}, {"id": "lobby", "name": "لوبي الحمام", "en": "Lobby", "poly": [[4730, 50], [5840, 50], [5840, 2430], [4730, 2430]], "floor": "tile", "cam": {"pos": [5300, 2900, 1650], "tgt": [5300, 200, 900]}, "area": 2.6}, {"id": "balcony", "name": "البلكونة", "en": "Balcony", "poly": [[50, 6000], [950, 6000], [950, 11900], [50, 11900]], "floor": "deck", "cam": {"pos": [700, 6300, 1650], "tgt": [400, 11500, 700]}, "area": 5.3}, {"id": "shaft", "name": "المسقط (المتبقي)", "en": "Light shaft", "poly": [[7240, 2480], [8090, 2480], [8090, 3280], [7240, 3280]], "floor": "none", "area": 0.7}], "furniture": [{"room": "reception", "type": "sofa", "x": 1475, "y": 7650, "w": 950, "d": 3300, "h": 820, "rot": 0, "label": "كنبة L – الجزء الطويل (3.3م)", "back": "left"}, {"room": "reception", "type": "sofa", "x": 2750, "y": 6475, "w": 1600, "d": 950, "h": 820, "rot": 0, "label": "كنبة L – الجزء القصير (1.6م)", "back": "bottom"}, {"room": "reception", "type": "coffee", "x": 2750, "y": 7900, "w": 700, "d": 1200, "h": 380, "rot": 0, "label": "ترابيزة وسط خشب أوك + رخام"}, {"room": "reception", "type": "side", "x": 1475, "y": 9550, "w": 450, "d": 450, "h": 520, "rot": 0, "label": "ترابيزة جانبية"}, {"room": "reception", "type": "rug", "x": 2650, "y": 7700, "w": 2400, "d": 3000, "h": 12, "rot": 0, "label": "سجادة صوف بيج 2.4×3م"}, {"room": "reception", "type": "tvwall", "x": 4655, "y": 8000, "w": 150, "d": 2600, "h": 2700, "rot": 0, "label": "حائط تلفزيون شرائح خشب"}, {"room": "reception", "type": "tvunit", "x": 4380, "y": 8000, "w": 400, "d": 2200, "h": 420, "rot": 0, "label": "وحدة تلفزيون معلّقة"}, {"room": "reception", "type": "tv", "x": 4550, "y": 8000, "w": 60, "d": 1660, "h": 950, "rot": 0, "label": "شاشة 75 بوصة", "z": 1050}, {"room": "reception", "type": "plant", "x": 4220, "y": 11450, "w": 500, "d": 500, "h": 1600, "rot": 0, "label": "نبات زينة في ركن الانتريه"}, {"room": "reception", "type": "rug", "x": 2850, "y": 10300, "w": 2400, "d": 2000, "h": 12, "rot": 0, "label": "سجادة الانتريه 2.0×2.4م", "tone": "light"}, {"room": "reception", "type": "sofa", "x": 2694, "y": 11475, "w": 2200, "d": 850, "h": 820, "rot": 0, "label": "كنبة الانتريه الكبيرة (3 مقاعد – 2.2م)", "back": "top", "arms": true, "fabric": "cream"}, {"room": "reception", "type": "sofa", "x": 4219, "y": 10200, "w": 850, "d": 1600, "h": 820, "rot": 0, "label": "كنبة الانتريه الصغيرة (2 مقعد – 1.6م)", "back": "right", "arms": true, "fabric": "cream"}, {"room": "reception", "type": "armchair", "x": 2900, "y": 9420, "w": 760, "d": 760, "h": 820, "rot": 180, "label": "كرسي فوتيه الانتريه (أوليف)"}, {"room": "reception", "type": "coffee", "x": 2900, "y": 10425, "w": 1000, "d": 550, "h": 400, "rot": 0, "label": "ترابيزة الانتريه أوك + رخام"}, {"room": "hall", "type": "bench_hall", "x": 3250, "y": 4650, "w": 400, "d": 700, "h": 450, "rot": 0, "label": "بنش جلوس"}, {"room": "hall", "type": "rug_round", "x": 4300, "y": 4200, "w": 1600, "d": 1600, "h": 10, "rot": 0, "label": "سجادة مدخل"}, {"room": "hall", "type": "shoe", "x": 5670, "y": 4700, "w": 300, "d": 1200, "h": 850, "rot": 0, "label": "كونسول على حيطة المطبخ"}, {"room": "hall", "type": "art", "x": 5800, "y": 4700, "w": 40, "d": 900, "h": 700, "rot": 0, "label": "لوحة", "z": 1300}, {"room": "kitchen", "type": "fridge", "x": 6270, "y": 3800, "w": 700, "d": 700, "h": 1900, "rot": 0, "label": "ثلاجة نوفروست", "front": "E"}, {"room": "kitchen", "type": "base", "x": 6220, "y": 5050.0, "w": 600, "d": 1800, "h": 900, "rot": 0, "label": "وحدات أرضية – الحيطة الجديدة", "front": "E"}, {"room": "kitchen", "type": "upper", "x": 6095, "y": 5125.0, "w": 350, "d": 1650, "h": 750, "rot": 0, "label": "دواليب علوية", "z": 1450, "front": "E"}, {"room": "kitchen", "type": "base", "x": 7305.0, "y": 5650, "w": 1570, "d": 600, "h": 900, "rot": 0, "label": "وحدات أرضية – حائط علوي", "front": "S"}, {"room": "kitchen", "type": "cooktop", "x": 7050, "y": 5650, "w": 700, "d": 500, "h": 910, "rot": 0, "label": "بوتاجاز بلت إن 4 عيون", "front": "S"}, {"room": "kitchen", "type": "hood", "x": 7050, "y": 5700, "w": 700, "d": 500, "h": 600, "rot": 0, "label": "شفاط", "z": 1650, "front": "S"}, {"room": "kitchen", "type": "upper", "x": 7305.0, "y": 5775, "w": 1570, "d": 350, "h": 750, "rot": 0, "label": "دواليب علوية", "z": 1450, "front": "S"}, {"room": "kitchen", "type": "base", "x": 7790, "y": 4365.0, "w": 600, "d": 1970, "h": 900, "rot": 0, "label": "وحدات أرضية – حائط جانبي", "front": "W"}, {"room": "kitchen", "type": "sink", "x": 7790, "y": 4550, "w": 500, "d": 800, "h": 910, "rot": 0, "label": "حوض جرانيت", "front": "W"}, {"room": "kitchen", "type": "washer", "x": 7790, "y": 3700, "w": 600, "d": 600, "h": 850, "rot": 0, "label": "غسالة أطباق", "front": "W"}, {"room": "kitchen", "type": "upper", "x": 7915, "y": 4700.0, "w": 350, "d": 1800, "h": 750, "rot": 0, "label": "دواليب علوية", "z": 1450, "front": "W"}, {"room": "kitchen", "type": "tall", "x": 6990, "y": 2780, "w": 400, "d": 600, "h": 2200, "rot": 0, "label": "دولاب طولي (كرار)", "front": "N"}, {"room": "bedroom", "type": "headwall", "x": 4830, "y": 9600, "w": 100, "d": 3200, "h": 1300, "rot": 0, "label": "تجليد خلف السرير"}, {"room": "bedroom", "type": "bed", "x": 5880, "y": 9600, "w": 2000, "d": 1900, "h": 450, "rot": 0, "label": "سرير 180×200", "pillows": "left"}, {"room": "bedroom", "type": "nightstand", "x": 5130, "y": 8350, "w": 500, "d": 450, "h": 500, "rot": 0, "label": "كومودينو"}, {"room": "bedroom", "type": "nightstand", "x": 5130, "y": 10850, "w": 500, "d": 450, "h": 500, "rot": 0, "label": "كومودينو"}, {"room": "bedroom", "type": "lamp", "x": 5130, "y": 8350, "w": 250, "d": 250, "h": 450, "rot": 0, "label": "أباجورة", "z": 500}, {"room": "bedroom", "type": "lamp", "x": 5130, "y": 10850, "w": 250, "d": 250, "h": 450, "rot": 0, "label": "أباجورة", "z": 500}, {"room": "bedroom", "type": "mirror", "x": 4795, "y": 7350, "w": 30, "d": 600, "h": 1700, "rot": 0, "label": "مراية طولية جنب الباب", "z": 200, "front": "E"}, {"room": "bedroom", "type": "wardrobe", "x": 7790, "y": 7500, "w": 600, "d": 3000, "h": 2600, "rot": 0, "label": "دولاب سحّاب 3م على الحيطة اليمين", "front": "W"}, {"room": "bedroom", "type": "dresser", "x": 6600, "y": 6225, "w": 1200, "d": 450, "h": 780, "rot": 0, "label": "تسريحة جنب الباب", "front": "N"}, {"room": "bedroom", "type": "mirror", "x": 6600, "y": 6015, "w": 800, "d": 30, "h": 1000, "rot": 0, "label": "مراية التسريحة", "z": 1000, "front": "N"}, {"room": "bedroom", "type": "pouf", "x": 6600, "y": 6750, "w": 420, "d": 420, "h": 450, "rot": 0, "label": "بوف التسريحة"}, {"room": "bedroom", "type": "ac", "x": 6600, "y": 6115, "w": 900, "d": 230, "h": 300, "rot": 0, "label": "تكييف سبليت فوق التسريحة", "z": 2450, "front": "N"}, {"room": "bedroom", "type": "tv", "x": 7974, "y": 9650, "w": 60, "d": 1230, "h": 720, "rot": 0, "label": "شاشة 55 بوصة قصاد السرير", "z": 1000, "front": "W"}, {"room": "bedroom", "type": "plant", "x": 7800, "y": 10650, "w": 400, "d": 400, "h": 1300, "rot": 0, "label": "نبات"}, {"room": "bedroom", "type": "armchair", "x": 7500, "y": 11350, "w": 750, "d": 780, "h": 800, "rot": -37, "label": "كرسي قراءة"}, {"room": "bedroom", "type": "floorlamp", "x": 7950, "y": 11750, "w": 300, "d": 300, "h": 1600, "rot": 0, "label": "أباجورة أرضية"}, {"room": "bedroom", "type": "rug", "x": 6200, "y": 9600, "w": 2000, "d": 2800, "h": 12, "rot": 0, "label": "سجادة"}, {"room": "kids", "type": "wardrobe", "x": 1180, "y": 5650, "w": 2000, "d": 600, "h": 2400, "rot": 0, "label": "دولاب 2م على الحيطة اللي بيفتح عليها الباب", "front": "S"}, {"room": "kids", "type": "bed", "x": 800, "y": 3525, "w": 1000, "d": 1950, "h": 420, "rot": 0, "label": "سرير مفرد 90×190", "pillows": "bottom", "kid": true, "tint": "#9fb7c9"}, {"room": "kids", "type": "nightstand", "x": 1525, "y": 2775, "w": 450, "d": 450, "h": 500, "rot": 0, "label": "كومودينو في النص", "front": "N"}, {"room": "kids", "type": "lamp", "x": 1525, "y": 2775, "w": 250, "d": 250, "h": 420, "rot": 0, "label": "أباجورة", "z": 500, "front": "N"}, {"room": "kids", "type": "bed", "x": 2250, "y": 3525, "w": 1000, "d": 1950, "h": 420, "rot": 0, "label": "سرير مفرد 90×190", "pillows": "bottom", "kid": true, "tint": "#d9b38c"}, {"room": "kids", "type": "rug", "x": 1525, "y": 4250, "w": 2300, "d": 1300, "h": 10, "rot": 0, "label": "سجادة"}, {"room": "kids", "type": "shelfwall", "x": 1525, "y": 2565, "w": 900, "d": 30, "h": 300, "rot": 0, "label": "رف حائط فوق الكومودينو", "z": 1300, "front": "N"}, {"room": "bath", "type": "wc", "x": 6700, "y": 380, "w": 380, "d": 660, "h": 400, "rot": 0, "label": "تواليت معلّق + شطّاف (تحت الشباك)", "front": "N"}, {"room": "bath", "type": "fan", "x": 6700, "y": -10, "w": 300, "d": 40, "h": 300, "rot": 0, "label": "شفاط في الشباك", "z": 1700, "front": "N"}, {"room": "bath", "type": "bathtub", "x": 7715, "y": 900, "w": 750, "d": 1700, "h": 560, "rot": 0, "label": "بانيو 170×75 على الحيطة اليمين", "front": "W"}, {"room": "bath", "type": "towel", "x": 5910, "y": 800, "w": 40, "d": 600, "h": 800, "rot": 0, "label": "فوّاطة (علّاقة فوط) على الشمال", "z": 900, "front": "E"}, {"room": "bath", "type": "vanity", "x": 7200, "y": 2180, "w": 800, "d": 500, "h": 850, "rot": 0, "label": "وحدة حوض معلّقة", "front": "S"}, {"room": "bath", "type": "mirror", "x": 7200, "y": 2415, "w": 600, "d": 30, "h": 850, "rot": 0, "label": "مراية بإضاءة", "z": 1050, "front": "S"}, {"room": "lobby", "type": "washer_free", "x": 5540, "y": 370, "w": 600, "d": 600, "h": 850, "rot": 0, "label": "غسالة ملابس", "front": "N"}, {"room": "lobby", "type": "fridge", "x": 4980, "y": 370, "w": 500, "d": 600, "h": 1700, "rot": 0, "label": "فريزر رأسي (عرض 50 سم)", "front": "N", "white": true}, {"room": "balcony", "type": "bistro_table", "x": 500, "y": 6650, "w": 600, "d": 600, "h": 720, "rot": 0, "label": "ترابيزة بلكونة صغيرة"}, {"room": "balcony", "type": "bistro_chair", "x": 500, "y": 6220, "w": 450, "d": 450, "h": 800, "rot": 180, "label": "كرسي"}, {"room": "balcony", "type": "bistro_chair", "x": 500, "y": 7100, "w": 450, "d": 450, "h": 800, "rot": 0, "label": "كرسي"}], "bounds": [-150, -150, 8290, 12100]}</script>
+<script>
+// ---------- shared data + text (non-module, runs first) ----------
+window.APT = JSON.parse(document.getElementById('data').textContent);
+const ROOM_TEXT = {
+  reception:{dims:"3.73 × 5.90 m", text:"الريسبشن متقسم لمنطقتين. ركنة التلفزيون زي ما هي: كنبة L قصاد حائط شرائح خشب. وجنب الشباك انتريه: كنبة كبيرة على حيطة الشباك، وكنبة صغيرة على الحيطة اليمين، وكرسي فوتيه ضهره لركنة التلفزيون، وترابيزة في النص. الجنب الشمال فاضي عشان الدخول للبلكونة.",
+    list:["ركنة التلفزيون: كنبة L (3.3 + 1.6 م) + ترابيزة وسط + شاشة 75 بوصة","كنبة انتريه كبيرة 3 مقاعد (2.2 م) على حيطة الشباك","كنبة انتريه صغيرة مقعدين (1.6 م) على الحيطة المشتركة مع النوم","كرسي فوتيه أوليف ضهره لركنة التلفزيون","ترابيزة انتريه 100×55 سم أوك ورخام + سجادة 2.0×2.4 م","ممر حوالي 1 م لباب البلكونة"],
+    fin:"<b>الأرضية:</b> بورسلين 60×120 بيج مطفي. <b>الانتريه:</b> قماش بوكليه كريمي مع خداديات أوليف. <b>السقف:</b> جبس بإضاءة كوف فوق كل منطقة لوحدها، ونجفة صغيرة فوق الانتريه."},
+  kitchen:{dims:"2.17 × 3.47 m", text:"المطبخ اتوسع بعد ضم المسقط، واتقفل عن الطرقة بحيطة وباب 80 سم جنب لوبي الحمام. الشكل بقى U: الثلاجة ووحدات أرضية على الحيطة الجديدة، والبوتاجاز والشفاط على الحيطة العليا، والحوض والغسالة على الحيطة الجانبية.",
+    list:["باب 80 سم بيفتح لجوه وبيلزق في حيطة الحمام","ثلاجة نوفروست أول ما تدخل على الشمال","بوتاجاز بلت إن 4 عيون + شفاط بيطلع على المسقط","حوض جرانيت + غسالة أطباق تحت الرخامة","دولاب طولي (كرار) جنب الباب، وممر الشغل حوالي 0.9–1 م"],
+    fin:"<b>الوحدات:</b> أرضي خشب أوك وعلوي أوف وايت مطفي. <b>الرخامة:</b> كوارتز أبيض. <b>الباك سبلاش:</b> زليج أبيض مكسور."},
+  bedroom:{dims:"3.31 × 5.90 m", text:"بعد شيل الطرقة اللي كانت جوه الأوضة، المساحة بقت 19.5 م² والباب بقى جنب حيطة المطبخ. الدولاب كله (3 م) على الحيطة اليمين من ناحية الباب، والتسريحة على الحيطة اللي جنب الباب، فالحيطة اللي قصاد السرير فضلت فاضية والأوضة بقت أوسع.",
+    list:["سرير 180×200 + كومودينو وأباجورة على الجنبين","تجليد قماش بيج بإطار أوك خلف السرير بإضاءة مخفية","دولاب سحّاب 3 م على الحيطة اليمين، من ركن حيطة المطبخ لحد رجل السرير","تسريحة 1.2 م + مراية + بوف على الحيطة اللي جنب الباب، وفوقها التكييف","شاشة 55 بوصة على الحيطة اللي قصاد السرير","مراية طولية جنب الباب، وكرسي قراءة جنب الشباك"],
+    fin:"<b>الأرضية:</b> باركيه/SPC أوك. <b>الحيطان:</b> بيج فاتح، وحيطة السرير أغمق درجة. <b>الستاير:</b> لينن + بلاك أوت."},
+  kids:{dims:"2.95 × 3.40 m", text:"من غير مكتب. الدولاب 2 م على الحيطة اللي بيفتح عليها الباب، بيبدأ بعد مكان فتحة الباب على طول. السريرين قصاد الدولاب وراسهم على الحيطة التانية، وبينهم كومودينو.",
+    list:["دولاب 2 م × 60 سم على الحيطة اللي بيفتح عليها الباب","سريرين 90×190 جنب بعض، لون مختلف لكل طفل","كومودينو في النص + أباجورة + رف حائط","حوالي 85 سم بين رجل السرير والدولاب","سجادة تحت رجلين السريرين"],
+    fin:"<b>الأرضية:</b> SPC أوك فاتح. <b>الألوان:</b> لبني هادي ورملي مع خشب فاتح."},
+  hall:{dims:"2.77 × 3.40 m", text:"ورا باب الشقة فاضي عشان مفيش مساحة. فيه بنش جلوس على الحيطة الشمال، وعلى حيطة المطبخ الجديدة كونسول ولوحة. من الطرقة بتدخل على الريسبشن والنوم والأطفال والمطبخ والحمام.",
+    list:["ورا باب الشقة فاضي","بنش جلوس للبس الجزم","كونسول 1.2 م + لوحة على حيطة المطبخ","سجادة مدخل دائرية"],
+    fin:"<b>الأرضية:</b> نفس بورسلين الريسبشن. <b>السقف:</b> جبس خطي بإضاءة مخفية بيوجّه للأوض."},
+  bath:{dims:"2.20 × 2.38 m", text:"الشباك بالشفاط على الحيطة اللي تحت والتواليت تحته، والبانيو على الحيطة اليمين، والفوّاطة (علّاقة فوط) على الحيطة الشمال تحت الباب. الحوض على الحيطة اللي فوق قصاد التواليت.",
+    list:["شباك 60 سم بشفاط، عالي من الأرض 1.5 م","تواليت معلّق + شطّاف تحت الشباك","بانيو 170×75 على الحيطة اليمين + خلاط ودش يد","فوّاطة: علّاقة فوط على الحيطة الشمال","وحدة حوض معلّقة 80 سم + مراية بإضاءة"],
+    fin:"<b>الأرضية والحيطان:</b> بورسلين حجر بيج مطفي، والحيطة اللي ورا البانيو درجة أغمق. <b>الخلاطات:</b> أسود مطفي."},
+  lobby:{dims:"1.11 × 2.38 m", text:"اللوبي من غير دواليب. على الحيطة اللي تحت الغسالة والفريزر جنب بعض، وفوق الغسالة الشباك.",
+    list:["غسالة ملابس 60×60 سم","فريزر رأسي عرض 50 سم","شباك فوق الغسالة","الباقي ممر فاضي للحمام"], fin:"<b>الأرضية:</b> نفس بورسلين الطرقة. <b>الحيطة اللي ورا الغسالة:</b> سيراميك لحد 1.2 م."},
+  balcony:{dims:"0.90 × 5.90 m", text:"ترابيزة صغيرة وكرسيين في طرف البلكونة البعيد عن الباب، والباقي فاضي.",
+    list:["ترابيزة صغيرة 60 سم","كرسيين"], fin:"<b>الأرضية:</b> ديك خشب خارجي (WPC)."}
+};
+const PALETTE = [
+  ["#EDE7DD","أوف وايت دافي","الحيطان"],["#DCCFBC","بيج رملي","بورسلين الأرضيات"],["#C49A6C","خشب أوك","الوحدات والأرضيات الخشب"],
+  ["#CBBFAE","جريج","الكنب والتجليد"],["#7D8158","أوليف","الفوتيهات واللمسات"],["#B8924F","نحاسي مطفي","المقابض والإضاءة"],
+  ["#3A3633","فحمي","الخلاطات والمعادن"],["#9FB7C9","لبني هادي","أوضة الأطفال"]
+];
+</script>
+<script>
+// ---------- facts, cards, palette ----------
+(function(){
+  const A = window.APT, R = Object.fromEntries(A.rooms.map(r=>[r.id,r]));
+  const net = A.rooms.filter(r=>r.id!=='shaft').reduce((s,r)=>s+r.area,0);
+  const facts = [['2','+ ريسبشن','أوضة نوم (رئيسية وأطفال)'],['6.7','م²','المطبخ بعد التوسعة'],[String(A.furniture.length),'قطعة','عفش وإكسسوار في الموديل']];
+  document.getElementById('facts').innerHTML = facts.map(f=>`<div class="fact"><div class="v">${f[0]}<small>${f[1]}</small></div><div class="k">${f[2]}</div></div>`).join('');
+  const order=['reception','kitchen','bedroom','kids','hall','bath','lobby','balcony'];
+  document.getElementById('roomCards').innerHTML = order.map(id=>{const r=R[id],t=ROOM_TEXT[id];return `<article class="room"><header><h3>${r.name}</h3><span class="area num">${r.area.toFixed(1)} م²</span></header><div class="dim num">${t.dims}</div><p>${t.text}</p><ul>${t.list.map(x=>`<li>${x}</li>`).join('')}</ul><div class="fin">${t.fin}</div><button data-room="${id}">شوفها 3D</button></article>`}).join('');
+  document.getElementById('palette').innerHTML = PALETTE.map(p=>`<div class="sw"><i style="background:${p[0]}"></i><div>${p[1]}<span>${p[2]}</span></div></div>`).join('');
+})();
+
+// ---------- 2D plan (SVG) ----------
+(function(){
+  const A = window.APT, NS='http://www.w3.org/2000/svg';
+  const css = getComputedStyle(document.documentElement);
+  function el(tag, attrs, parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+  const FLOOR={tile:'#EFE9DF',wood:'#E8D6BE',bath:'#DCE1E0',deck:'#D9C3A5',none:'#D6E4EE'};
+  const ROUND=new Set(['pouf','stool','rug_round','plant','planter','pendant','lamp','floorlamp','side','bistro_table']);
+  // before-state geometry for the kitchen/shaft
+  function geometry(before){
+    return before?{walls:A.before.walls,rooms:A.before.rooms,doors:A.before.doors}:{walls:A.walls,rooms:A.rooms,doors:A.doors};
+  }
+  // split walls at windows (same as 3D)
+  function windowCut(walls){
+    let out=walls.slice();
+    for(const w of A.windows){
+      const nx=[];
+      for(const s of out){
+        const ax=w.axis==='x', a0=ax?s.x0:s.y0, a1=ax?s.x1:s.y1, c0=ax?s.y0:s.x0, c1=ax?s.y1:s.x1;
+        if(w.c>c0&&w.c<c1&&w.a<a1&&w.b>a0&&s.kind!=='parapet'){
+          if(w.a>a0) nx.push(ax?{...s,x1:w.a}:{...s,y1:w.a});
+          if(w.b<a1) nx.push(ax?{...s,x0:w.b}:{...s,y0:w.b});
+        } else nx.push(s);
+      }
+      out=nx;
+    }
+    return out;
+  }
+  function draw(svg, opt){
+    svg.innerHTML='';
+    const ink=css.getPropertyValue('--poche').trim()||'#2E2A26';
+    const muted=css.getPropertyValue('--muted').trim()||'#756D63';
+    const vb=opt.vb||[-1150,-13300,10600,14350];
+    svg.setAttribute('viewBox',vb.join(' '));
+    const g=el('g',{transform:'scale(1,-1)'},svg); // plan y up
+    const {walls,rooms,doors}=geometry(opt.before);
+    for(const r of rooms){
+      el('polygon',{points:r.poly.map(p=>p.join(',')).join(' '),fill:FLOOR[r.floor]||'#eee'},g);
+      if(r.id==='shaft'){
+        const xs=r.poly.map(p=>p[0]),ys=r.poly.map(p=>p[1]);const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+        for(let k=-4000;k<4000;k+=180) el('line',{x1:x0+k,y1:y0,x2:x0+k+(y1-y0),y2:y1,stroke:'#8FB1C9','stroke-width':14,'clip-path':''},g);
+      }
+    }
+    // clip hatch to shaft: simple approach — redraw surrounding rooms on top is complex; use clipPath
+    const shaft=rooms.find(r=>r.id==='shaft');
+    if(shaft){const cp=el('clipPath',{id:'cp'+opt.id},svg);el('polygon',{points:shaft.poly.map(p=>p.join(',')).join(' ')},cp);g.querySelectorAll('line').forEach(l=>l.setAttribute('clip-path',`url(#cp${opt.id})`));}
+    if(!opt.noFurniture&&!opt.before){
+      const items=A.furniture.filter(f=>!(opt.before&&f.room==='kitchen')&&!(opt.before&&f.type==='stool')&&f.type!=='pendant'&&f.type!=='hood'&&f.type!=='upper'&&f.type!=='mirror'&&f.type!=='art'&&f.type!=='shelfwall'&&f.type!=='towel'&&f.type!=='lamp'&&f.type!=='ac'&&f.type!=='fan');
+      items.sort((a,b)=>(b.type.startsWith('rug')?1:0)-(a.type.startsWith('rug')?1:0));
+      for(const f of items){
+        const pb=(f.type==='bed'&&f.pillows==='bottom'); const fw=pb?f.d:f.w, fd=pb?f.w:f.d;
+        const fg=el('g',{transform:`translate(${f.x},${f.y}) rotate(${f.rot+(pb?90:0)})`},g);
+        const t=el('title',{},fg);t.textContent=f.label;
+        const rug=f.type.startsWith('rug');
+        const st={fill:rug?'none':'#FBFAF7',stroke:rug?'#BFA88A':'#6E5A46','stroke-width':rug?14:16};
+        if(rug) st['stroke-dasharray']='60 40';
+        if(ROUND.has(f.type)) el('circle',{r:Math.min(fw,fd)/2,...st},fg);
+        else el('rect',{x:-fw/2,y:-fd/2,width:fw,height:fd,rx:f.type==='sofa'||f.type==='armchair'?60:8,...st},fg);
+        if(f.type==='bed'){ // pillows on -x
+          const n=fd>1500?2:1, pw=(fd-160)/n;
+          for(let i=0;i<n;i++) el('rect',{x:-fw/2+60,y:-fd/2+80+i*pw+20,width:300,height:pw-40,rx:40,fill:'#fff',stroke:'#6E5A46','stroke-width':10},fg);
+          el('line',{x1:-fw/2+520,y1:-fd/2,x2:-fw/2+520,y2:fd/2,stroke:'#6E5A46','stroke-width':10},fg);
+          el('line',{x1:-fw/2+520,y1:-fd/2,x2:fw/2,y2:fd/2,stroke:'#B9A48C','stroke-width':8},fg);
+        }
+        if(f.type==='sofa'){ const bs={fill:'#E9E1D5',stroke:'#6E5A46','stroke-width':10}; const r={left:{x:-fw/2,y:-fd/2,width:220,height:fd},right:{x:fw/2-220,y:-fd/2,width:220,height:fd},bottom:{x:-fw/2,y:-fd/2,width:fw,height:220},top:{x:-fw/2,y:fd/2-220,width:fw,height:220}}[f.back]; el('rect',{...r,...bs},fg);
+          if(f.arms){ if(f.back==='left'||f.back==='right'){el('rect',{x:-fw/2,y:-fd/2,width:fw,height:170,...bs},fg);el('rect',{x:-fw/2,y:fd/2-170,width:fw,height:170,...bs},fg);} else {el('rect',{x:-fw/2,y:-fd/2,width:170,height:fd,...bs},fg);el('rect',{x:fw/2-170,y:-fd/2,width:170,height:fd,...bs},fg);} } }
+        if(f.type==='armchair'||f.type==='chair_office'||f.type==='chair_kid'||f.type==='bistro_chair') el('rect',{x:-fw/2,y:fd/2-150,width:fw,height:150,fill:'#E9E1D5',stroke:'#6E5A46','stroke-width':10},fg);
+        if(f.type==='cooktop'){for(const [dx,dy] of [[-170,-110],[170,-110],[-170,110],[170,110]]) el('circle',{cx:dx,cy:dy,r:85,fill:'none',stroke:'#6E5A46','stroke-width':10},fg);}
+        if(f.type==='sink'||f.type==='vanity'||f.type==='basin') el('ellipse',{rx:Math.min(fw,fd)*0.32,ry:Math.max(fw,fd)*0.28,transform:fw<fd?'':'rotate(90)',fill:'none',stroke:'#6E5A46','stroke-width':10},fg);
+        if(f.type==='wc') el('ellipse',{cx:-60,rx:240,ry:160,fill:'none',stroke:'#6E5A46','stroke-width':10},fg);
+        if(f.type==='bathtub') el('rect',{x:-fw/2+80,y:-fd/2+80,width:fw-160,height:fd-160,rx:150,fill:'none',stroke:'#6E5A46','stroke-width':10},fg);
+        if(f.type==='shower'){el('line',{x1:-fw/2,y1:-fd/2,x2:fw/2,y2:fd/2,stroke:'#6E5A46','stroke-width':8},fg);el('line',{x1:-fw/2,y1:fd/2,x2:fw/2,y2:-fd/2,stroke:'#6E5A46','stroke-width':8},fg);}
+        if(f.type==='wardrobe'||f.type==='tall'){el('line',{x1:-fw/2,y1:-fd/2,x2:fw/2,y2:fd/2,stroke:'#B9A48C','stroke-width':8},fg);}
+        if(f.type==='bar_top') {fg.querySelector('rect').setAttribute('fill','none');fg.querySelector('rect').setAttribute('stroke-dasharray','50 30');}
+      }
+    }
+    // walls
+    for(const w of windowCut(walls)) el('rect',{x:w.x0,y:w.y0,width:w.x1-w.x0,height:w.y1-w.y0,fill:w.kind==='parapet'?'#9A928A':ink},g);
+    for(const c of A.cols) el('rect',{x:c.x0,y:c.y0,width:c.x1-c.x0,height:c.y1-c.y0,fill:ink},g);
+    // windows
+    for(const w of A.windows){
+      if(opt.before&&w.id==='w_kit') continue;
+      const ax=w.axis==='x';
+      const r=ax?{x:w.a,y:w.c-w.t/2,width:w.b-w.a,height:w.t}:{x:w.c-w.t/2,y:w.a,width:w.t,height:w.b-w.a};
+      el('rect',{...r,fill:'#FBFAF7',stroke:ink,'stroke-width':10},g);
+      if(ax) el('line',{x1:w.a,y1:w.c,x2:w.b,y2:w.c,stroke:ink,'stroke-width':10},g); else el('line',{x1:w.c,y1:w.a,x2:w.c,y2:w.b,stroke:ink,'stroke-width':10},g);
+    }
+    // doors
+    for(const d of doors){
+      const [hx,hy]=d.hinge, L=d.leaf;
+      const ax=d.axis==='x';
+      if(d.double){
+        const half=(d.b-d.a)/2;
+        for(const [py,sgn] of [[d.a,1],[d.b,-1]]){
+          el('path',{d:`M ${hx} ${py+sgn*half} A ${half} ${half} 0 0 ${sgn>0?1:0} ${hx-half} ${py} L ${hx} ${py}`,fill:'none',stroke:muted,'stroke-width':10},g);
+          el('line',{x1:hx,y1:py,x2:hx-half,y2:py,stroke:ink,'stroke-width':22},g);
+        }
+        continue;
+      }
+      // closed position end point and open position end
+      let closed, open;
+      if(ax){ const sx=(Math.abs(hx-d.a)<Math.abs(hx-d.b))?1:-1; closed=[hx+sx*L,hy]; open=[hx,hy+d.dir*L]; }
+      else { const sy=(Math.abs(hy-d.a)<Math.abs(hy-d.b))?1:-1; closed=[hx,hy+sy*L]; open=[hx+d.dir*L,hy]; }
+      const cross=(closed[0]-hx)*(open[1]-hy)-(closed[1]-hy)*(open[0]-hx);
+      el('path',{d:`M ${closed[0]} ${closed[1]} A ${L} ${L} 0 0 ${cross>0?1:0} ${open[0]} ${open[1]}`,fill:'none',stroke:muted,'stroke-width':10,'stroke-dasharray':'40 30'},g);
+      el('line',{x1:hx,y1:hy,x2:open[0],y2:open[1],stroke:ink,'stroke-width':30},g);
+    }
+    // labels (unflipped)
+    const lab=el('g',{},svg);
+    for(const r of rooms){
+      if(opt.noLabels && !opt.labelIds.includes(r.id)) continue;
+      const xs=r.poly.map(p=>p[0]),ys=r.poly.map(p=>p[1]);
+      let cx=(Math.min(...xs)+Math.max(...xs))/2, cy=(Math.min(...ys)+Math.max(...ys))/2;
+      const pos={reception:[3650,8750],kids:[1100,4250],bedroom:[6200,7750],hall:[4300,4250],kitchen:[6950,4550],bath:[6600,1500],lobby:[5290,2150],balcony:[500,8600],passage:[5400,6470],shaft:[7665,2880]}[r.id];
+      if(pos&&!opt.before) [cx,cy]=pos; else if(pos&&opt.before&&!['kitchen','shaft','bedroom'].includes(r.id)) [cx,cy]=pos;
+      const small=['balcony','lobby','passage','shaft'].includes(r.id);
+      const fs=opt.vb?(small?120:150):(small?150:230);
+      const t=el('text',{x:cx,y:-cy,'text-anchor':'middle','font-family':'IBM Plex Sans Arabic, Tahoma, sans-serif','font-size':fs,'font-weight':600,fill:'#25221E',...(r.id==='balcony'?{transform:`rotate(-90 ${cx} ${-cy})`}:{})},lab);
+      t.textContent=r.id==='shaft'?(opt.before?'المسقط':'مسقط'):r.name.replace(' (المتبقي)','');
+      if(r.id!=='shaft'){const t2=el('text',{x:cx,y:-cy+fs*1.05,'text-anchor':'middle','font-family':'IBM Plex Sans Arabic, Tahoma, sans-serif','font-size':fs*0.72,fill:'#756D63',...(r.id==='balcony'?{transform:`rotate(-90 ${cx} ${-cy})`}:{})},lab);t2.textContent=`${r.area.toFixed(1)} م²`;}
+    }
+    if(opt.dims){
+      const dl=el('g',{fill:muted,stroke:muted,'font-family':'IBM Plex Sans Arabic, Tahoma, sans-serif','font-size':150},svg);
+      const chain=(pts,fixed,axis,off)=>{
+        for(let i=0;i<pts.length-1;i++){
+          const a=pts[i],b=pts[i+1];
+          if(axis==='x'){ el('line',{x1:a,y1:-fixed,x2:b,y2:-fixed,'stroke-width':10},dl); el('line',{x1:a,y1:-fixed-60,x2:a,y2:-fixed+60,'stroke-width':10},dl); el('line',{x1:b,y1:-fixed-60,x2:b,y2:-fixed+60,'stroke-width':10},dl);
+            const t=el('text',{x:(a+b)/2,y:-fixed-off,'text-anchor':'middle',stroke:'none'},dl); t.textContent=Math.round(b-a); }
+          else { el('line',{x1:fixed,y1:-a,x2:fixed,y2:-b,'stroke-width':10},dl); el('line',{x1:fixed-60,y1:-a,x2:fixed+60,y2:-a,'stroke-width':10},dl); el('line',{x1:fixed-60,y1:-b,x2:fixed+60,y2:-b,'stroke-width':10},dl);
+            const tx=fixed+off, ty=-(a+b)/2; const t=el('text',{x:tx,y:ty,'text-anchor':'middle',stroke:'none',transform:`rotate(-90 ${tx} ${ty})`},dl); t.textContent=Math.round(b-a); }
+        }
+      };
+      chain([50,1000,4730,8090],12500,'x',60);
+      chain([50,3000,4730,5840,8090],-650,'x',-200);
+      chain([2550,5950,11900],-600,'y',-90);
+      chain(opt.before?[50,2430,5950,6950,11900]:[50,2430,3330,5950,11900],8750,'y',190);
+    }
+  }
+  window.drawPlan=draw;
+  const svg=document.getElementById('planSvg');
+  const bA=document.getElementById('pAfter'), bB=document.getElementById('pBefore');
+  const show=(before)=>{draw(svg,{id:'main',before,dims:true});bA.setAttribute('aria-pressed',!before);bB.setAttribute('aria-pressed',before);};
+  bA.onclick=()=>show(false); bB.onclick=()=>show(true); show(false);
+  const vb=[4500,-6250,4000,4000], vb2=[4450,-12250,4000,6600];
+  draw(document.getElementById('modBefore'),{id:'b',before:true,vb,noLabels:true,labelIds:['kitchen','shaft']});
+  draw(document.getElementById('modAfter'),{id:'a',before:false,vb,noLabels:true,labelIds:['kitchen','shaft']});
+  draw(document.getElementById('modBedBefore'),{id:'bb',before:true,vb:vb2,noLabels:true,labelIds:['bedroom','passage']});
+  draw(document.getElementById('modBedAfter'),{id:'ba',before:false,vb:vb2,noLabels:true,labelIds:['bedroom']});
+  const mq=window.matchMedia('(prefers-color-scheme: dark)'); mq.addEventListener&&mq.addEventListener('change',()=>show(bB.getAttribute('aria-pressed')==='true'));
+})();
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+const A = window.APT, M = 0.001;
+const viewer = document.getElementById('viewer');
+const ROOMS = Object.fromEntries(A.rooms.map(r=>[r.id,r]));
+
+// ---------- renderer / scene ----------
+const renderer = new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+viewer.prepend(renderer.domElement);
+const labelR = new CSS2DRenderer(); labelR.domElement.style.position='absolute'; labelR.domElement.style.inset='0'; labelR.domElement.style.pointerEvents='none'; labelR.domElement.style.direction='ltr';
+viewer.appendChild(labelR.domElement);
+
+const scene = new THREE.Scene();
+const DAY_BG = new THREE.Color('#E9E4DB'), NIGHT_BG = new THREE.Color('#1E2230');
+scene.background = DAY_BG;
+const pmrem = new THREE.PMREMGenerator(renderer);
+const envTex = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture; scene.environment = envTex;
+
+const camera = new THREE.PerspectiveCamera(45, 1, 0.05, 200);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = 0.08; controls.maxPolarAngle = Math.PI*0.495; controls.minDistance = 0.4; controls.maxDistance = 40;
+
+const hemi = new THREE.HemisphereLight('#fff8ee', '#8f8270', 0.55); scene.add(hemi);
+const sun = new THREE.DirectionalLight('#ffe9cc', 1.7);
+const CX=(A.bounds[0]+A.bounds[2])/2*M, CY=(A.bounds[1]+A.bounds[3])/2*M;
+sun.position.set(CX-6, 14, -CY+8); sun.target.position.set(CX,0,-CY);
+sun.castShadow = true; sun.shadow.mapSize.set(2048,2048);
+Object.assign(sun.shadow.camera,{left:-9,right:9,top:9,bottom:-9,near:1,far:40}); sun.shadow.bias=-0.0004; sun.shadow.normalBias=0.02;
+scene.add(sun, sun.target);
+
+// ---------- materials ----------
+function canvasTex(draw, size=512, repeat=1){
+  const c=document.createElement('canvas'); c.width=c.height=size; const g=c.getContext('2d'); draw(g,size);
+  const t=new THREE.CanvasTexture(c); t.wrapS=t.wrapT=THREE.RepeatWrapping; t.colorSpace=THREE.SRGBColorSpace; t.anisotropy=8; t.repeat.set(repeat,repeat); return t;
+}
+const rnd=(()=>{let s=7;return()=>(s=(s*16807)%2147483647)/2147483647})();
+const texTile = canvasTex((g,s)=>{g.fillStyle='#E7DFD2';g.fillRect(0,0,s,s);for(let i=0;i<4000;i++){g.fillStyle=`rgba(${120+rnd()*60},${100+rnd()*50},${80},${rnd()*0.05})`;g.fillRect(rnd()*s,rnd()*s,2+rnd()*3,2+rnd()*3);}g.strokeStyle='#CDBFAD';g.lineWidth=3;for(let k=0;k<=2;k++){g.beginPath();g.moveTo(0,k*s/2);g.lineTo(s,k*s/2);g.stroke();}g.beginPath();g.moveTo(0,0);g.lineTo(0,s);g.stroke();}, 512, 1/1.2);
+const texWood = canvasTex((g,s)=>{const n=4,pw=s/n;for(let i=0;i<n;i++){let y=0;let off=rnd()*s;for(let k=-1;k<3;k++){const L=s*0.75;const tone=170+rnd()*35;g.fillStyle=`rgb(${tone+28},${tone-8},${tone-55})`;g.fillRect(i*pw,(off+k*L)%s,pw,L);} }
+  for(let i=0;i<900;i++){g.strokeStyle=`rgba(90,55,25,${0.04+rnd()*0.06})`;g.lineWidth=1;const x=rnd()*s;g.beginPath();g.moveTo(x,0);g.bezierCurveTo(x+6,s*0.3,x-6,s*0.7,x+3,s);g.stroke();}
+  g.strokeStyle='rgba(80,50,25,.45)';g.lineWidth=2;for(let i=0;i<=n;i++){g.beginPath();g.moveTo(i*pw,0);g.lineTo(i*pw,s);g.stroke();}
+},512,1/0.8);
+const texBath = canvasTex((g,s)=>{g.fillStyle='#D2CBC0';g.fillRect(0,0,s,s);for(let i=0;i<3000;i++){g.fillStyle=`rgba(90,80,70,${rnd()*0.06})`;g.fillRect(rnd()*s,rnd()*s,3,3);}g.strokeStyle='#B5AC9F';g.lineWidth=3;for(let k=0;k<=2;k++){g.beginPath();g.moveTo(0,k*s/2);g.lineTo(s,k*s/2);g.stroke();g.beginPath();g.moveTo(k*s/2,0);g.lineTo(k*s/2,s);g.stroke();}},512,1/1.2);
+const texDeck = canvasTex((g,s)=>{const n=6,pw=s/n;for(let i=0;i<n;i++){const t=120+rnd()*30;g.fillStyle=`rgb(${t+30},${t},${t-30})`;g.fillRect(i*pw,0,pw-5,s);g.fillStyle='#4a3a2a';g.fillRect(i*pw+pw-5,0,5,s);}},512,1/0.9);
+
+const MAT = {};
+const std=(c,o={})=>new THREE.MeshStandardMaterial({color:c,roughness:0.75,metalness:0,...o});
+Object.assign(MAT,{
+  wall: std('#EFEAE2',{roughness:0.92}), poche: std('#3A3530',{roughness:1}), parapet: std('#E3DCD1'),
+  oak: std('#C49A6C',{roughness:0.6}), walnut: std('#7A5638',{roughness:0.55}), white: std('#F1EDE6',{roughness:0.5}),
+  greige: std('#CBBFAE',{roughness:0.95}), greige2: std('#BBAE9B',{roughness:0.95}), olive: std('#7D8158',{roughness:0.95}),
+  cream: std('#EFE7DA',{roughness:0.95}), linen: std('#F6F2EA',{roughness:0.95}),
+  charcoal: std('#3A3633',{roughness:0.5,metalness:0.2}), black: std('#1E1D1C',{roughness:0.35,metalness:0.3}),
+  brass: std('#B8924F',{roughness:0.35,metalness:0.9}), steel: std('#C9C9C6',{roughness:0.3,metalness:0.8}),
+  marble: std('#F1EEE9',{roughness:0.25}), quartz: std('#F4F2EE',{roughness:0.3}),
+  glass: new THREE.MeshStandardMaterial({color:'#cfe3ea',roughness:0.05,metalness:0.1,transparent:true,opacity:0.28,depthWrite:false}),
+  mirror: std('#d8dde0',{roughness:0.04,metalness:1}),
+  screen: std('#0d0f12',{roughness:0.2,metalness:0.4}),
+  leaf: std('#5E7A4A',{roughness:0.8}), leaf2: std('#4F6B3F',{roughness:0.8}), pot: std('#B9805C',{roughness:0.85}), potw: std('#E6E0D6',{roughness:0.85}),
+  rug: std('#DCCDB6',{roughness:1}), rugLight: std('#E9E1D3',{roughness:1}), rug2: std('#C9B79C',{roughness:1}), rugKid: std('#C7D3D8',{roughness:1}),
+  tileWall: std('#CFC7BB',{roughness:0.6}), door: std('#D9C3A2',{roughness:0.6}), doorMain: std('#6B4A32',{roughness:0.5}),
+  lightOn: new THREE.MeshStandardMaterial({color:'#fff3dc',emissive:'#ffd9a0',emissiveIntensity:0.15,roughness:0.6}),
+  led: new THREE.MeshStandardMaterial({color:'#fff3dc',emissive:'#ffcf8a',emissiveIntensity:0.2}),
+  blueKid: std('#9FB7C9',{roughness:0.9}), sandKid: std('#D9B38C',{roughness:0.9}),
+  floorTile: std('#ffffff',{map:texTile,roughness:0.55}), floorWood: std('#ffffff',{map:texWood,roughness:0.6}),
+  floorBath: std('#ffffff',{map:texBath,roughness:0.5}), floorDeck: std('#ffffff',{map:texDeck,roughness:0.8}),
+  water: std('#9ec4d6',{roughness:0.2,metalness:0.1}),
+  frame: std('#2b2724',{roughness:0.5}), art1: std('#C9A27E'), art2: std('#7D8158'), art3: std('#E8DFD2'),
+  ceiling: new THREE.MeshStandardMaterial({color:'#F7F4EF',roughness:1,side:THREE.BackSide})
+});
+const books=['#7D8158','#B8924F','#A9784A','#E6DCCB','#3A3633','#9FB7C9','#C49A6C'].map(c=>std(c));
+
+// ---------- helpers: plan(mm) -> world ----------
+const root = new THREE.Group(); scene.add(root);
+function mesh(geo, mat, cast=true, recv=true){const m=new THREE.Mesh(geo,mat);m.castShadow=cast;m.receiveShadow=recv;return m;}
+function addBox(parent,x0,y0,x1,y1,z0,z1,mat,opt={}){ // world plan coordinates mm
+  const geo=new THREE.BoxGeometry((x1-x0)*M,(z1-z0)*M,(y1-y0)*M);
+  const m=mesh(geo,mat,opt.cast!==false,true); m.position.set((x0+x1)/2*M,(z0+z1)/2*M,-(y0+y1)/2*M); parent.add(m); return m;
+}
+
+// ---------- floors ----------
+const floorMat={tile:MAT.floorTile,wood:MAT.floorWood,bath:MAT.floorBath,deck:MAT.floorDeck};
+const floors=new THREE.Group(); root.add(floors);
+for(const r of A.rooms){
+  if(r.floor==='none') continue;
+  const sh=new THREE.Shape(r.poly.map(p=>new THREE.Vector2(p[0]*M,p[1]*M)));
+  const m=mesh(new THREE.ShapeGeometry(sh),floorMat[r.floor],false,true); m.rotation.x=-Math.PI/2; m.position.y=0.001; floors.add(m);
+}
+// gaps under walls/openings: base slab
+{const g=new THREE.BoxGeometry((A.bounds[2]-A.bounds[0])*M+0.4,0.2,(A.bounds[3]-A.bounds[1])*M+0.4);const m=mesh(g,std('#B7AC9C'),false,true);m.position.set(CX,-0.101,-CY);root.add(m);}
+// shaft bottom
+addBox(root,7240,2480,8090,3280,-60,-50,std('#9DB4C4'),{cast:false});
+
+// ---------- walls (split at windows) ----------
+const H=A.H;
+let wallRects=A.walls.map(w=>({...w}));
+const extras=[]; // sills/lintels
+for(const w of A.windows){
+  const nx=[];
+  for(const s of wallRects){
+    const ax=w.axis==='x', a0=ax?s.x0:s.y0, a1=ax?s.x1:s.y1, c0=ax?s.y0:s.x0, c1=ax?s.y1:s.x1;
+    if(s.kind!=='parapet' && w.c>c0 && w.c<c1 && w.a<a1 && w.b>a0){
+      if(w.a>a0) nx.push(ax?{...s,x1:w.a}:{...s,y1:w.a});
+      if(w.b<a1) nx.push(ax?{...s,x0:w.b}:{...s,y0:w.b});
+      const piece=ax?{x0:w.a,x1:w.b,y0:s.y0,y1:s.y1}:{x0:s.x0,x1:s.x1,y0:w.a,y1:w.b};
+      extras.push({...piece,z0:0,z1:w.sill,kind:'sill'},{...piece,z0:w.top,z1:H,kind:'lintel'});
+      // glass + frame
+      const gp=ax?{x0:w.a,x1:w.b,y0:w.c-15,y1:w.c+15}:{x0:w.c-15,x1:w.c+15,y0:w.a,y1:w.b};
+      extras.push({...gp,z0:w.sill,z1:w.top,kind:'glass'});
+    } else nx.push(s);
+  }
+  wallRects=nx;
+}
+for(const d of A.doors){ const ax=d.axis==='x'; const r=ax?{x0:d.a,x1:d.b,y0:d.c-d.t/2,y1:d.c+d.t/2}:{x0:d.c-d.t/2,x1:d.c+d.t/2,y0:d.a,y1:d.b}; extras.push({...r,z0:d.id==='balc'?2300:2200,z1:H,kind:'lintel'}); }
+for(const p of A.passages){ const ax=p.axis==='x'; const r=ax?{x0:p.a,x1:p.b,y0:p.c-p.t/2,y1:p.c+p.t/2}:{x0:p.c-p.t/2,x1:p.c+p.t/2,y0:p.a,y1:p.b}; extras.push({...r,z0:p.top,z1:H,kind:'lintel'}); }
+
+const wallMeshes=[];
+const wallMatArr=[MAT.wall,MAT.wall,MAT.poche,MAT.wall,MAT.wall,MAT.wall];
+for(const w of wallRects){
+  const h=w.h||H; const geo=new THREE.BoxGeometry((w.x1-w.x0)*M,h*M,(w.y1-w.y0)*M);
+  const m=mesh(geo,w.kind==='parapet'?[MAT.parapet,MAT.parapet,MAT.poche,MAT.parapet,MAT.parapet,MAT.parapet]:wallMatArr);
+  m.position.set((w.x0+w.x1)/2*M,h/2*M,-(w.y0+w.y1)/2*M); m.userData={h,z0:0,kind:w.kind}; root.add(m); wallMeshes.push(m);
+}
+for(const c of A.cols){ const m=addBox(root,c.x0,c.y0,c.x1,c.y1,0,H,wallMatArr); m.userData={h:H,z0:0,kind:'col'}; wallMeshes.push(m); }
+for(const e of extras){
+  if(e.kind==='glass'){ const m=addBox(root,e.x0,e.y0,e.x1,e.y1,e.z0,e.z1,MAT.glass,{cast:false}); m.userData={kind:'glass',z0:e.z0,z1:e.z1}; wallMeshes.push(m);
+    // frame
+    const ax=(e.x1-e.x0)>(e.y1-e.y0);
+    const fr=[[e.z0,e.z0+50],[e.z1-50,e.z1]];
+    for(const [a,b] of fr){const fm=addBox(root,e.x0-(ax?0:10),e.y0-(ax?10:0),e.x1+(ax?0:10),e.y1+(ax?10:0),a,b,MAT.charcoal);fm.userData={kind:'frame',z0:a,z1:b};wallMeshes.push(fm);}
+    continue; }
+  const m=addBox(root,e.x0,e.y0,e.x1,e.y1,e.z0,e.z1,e.kind==='sill'?wallMatArr:wallMatArr); m.userData={kind:e.kind,z0:e.z0,z1:e.z1,h:e.z1-e.z0}; wallMeshes.push(m);
+}
+// window sill stones
+for(const w of A.windows){ const ax=w.axis==='x'; const r=ax?{x0:w.a-30,x1:w.b+30,y0:w.c-w.t/2-30,y1:w.c+w.t/2+30}:{x0:w.c-w.t/2-30,x1:w.c+w.t/2+30,y0:w.a-30,y1:w.b+30}; const m=addBox(root,r.x0,r.y0,r.x1,r.y1,w.sill,w.sill+25,MAT.marble); m.userData={kind:'sillstone',z0:w.sill,z1:w.sill+25}; wallMeshes.push(m); }
+
+// doors (leaves open 90°)
+for(const d of A.doors){
+  const mat=d.id==='main'?MAT.doorMain:MAT.door, Hd=(d.id==='balc'?2250:2150);
+  const leafs=d.double?[{h:[d.hinge[0],d.a],L:(d.b-d.a)/2},{h:[d.hinge[0],d.b],L:(d.b-d.a)/2}]:[{h:d.hinge,L:d.leaf}];
+  for(const lf of leafs){
+    const [hx,hy]=lf.h, L=lf.L, T=40;
+    let r;
+    if(d.double){ r={x0:hx-L,x1:hx,y0:hy-T/2,y1:hy+T/2}; }
+    else if(d.axis==='x'){ r={x0:hx-T/2,x1:hx+T/2,y0:Math.min(hy,hy+d.dir*L),y1:Math.max(hy,hy+d.dir*L)}; }
+    else { r={x0:Math.min(hx,hx+d.dir*L),x1:Math.max(hx,hx+d.dir*L),y0:hy-T/2,y1:hy+T/2}; }
+    const m=addBox(root,r.x0,r.y0,r.x1,r.y1,0,Hd,d.double?MAT.glass:mat); m.userData={kind:'door',z0:0,z1:Hd,h:Hd}; wallMeshes.push(m);
+    if(d.double){ const f=addBox(root,r.x0,r.y0-5,r.x1,r.y1+5,0,60,MAT.charcoal); f.userData={kind:'door',z0:0,z1:60}; wallMeshes.push(f);}
+  }
+  // frame jambs color
+}
+
+// ceiling (visible from below only) + recessed spots
+const ceil=new THREE.Group(); root.add(ceil);
+for(const r of A.rooms){ if(r.floor==='none'||r.id==='balcony') continue;
+  const sh=new THREE.Shape(r.poly.map(p=>new THREE.Vector2(p[0]*M,p[1]*M)));
+  const m=new THREE.Mesh(new THREE.ShapeGeometry(sh),MAT.ceiling); m.rotation.x=-Math.PI/2; m.position.y=H*M-0.002; ceil.add(m);
+}
+
+// ---------- furniture builders ----------
+// local frame: u along width (front face), v depth (front = -v), z up; mm relative to centre
+function B(g,u0,u1,v0,v1,z0,z1,mat,round=0){
+  const w=(u1-u0)*M,h=(z1-z0)*M,d=(v1-v0)*M;
+  const rr=round>0?Math.min(round*M,w/2-0.001,h/2-0.001,d/2-0.001):0;
+  const geo=rr>0.002?new RoundedBoxGeometry(w,h,d,3,rr):new THREE.BoxGeometry(w,h,d);
+  const m=mesh(geo,mat); m.position.set((u0+u1)/2*M,(z0+z1)/2*M,-(v0+v1)/2*M); g.add(m); return m;
+}
+function C(g,u,v,r,z0,z1,mat,seg=24,r2){const m=mesh(new THREE.CylinderGeometry((r2??r)*M,r*M,(z1-z0)*M,seg),mat);m.position.set(u*M,(z0+z1)/2*M,-v*M);g.add(m);return m;}
+function S(g,u,v,z,r,mat,sx=1,sy=1,sz=1){const m=mesh(new THREE.IcosahedronGeometry(r*M,1),mat);m.position.set(u*M,z*M,-v*M);m.scale.set(sx,sy,sz);g.add(m);return m;}
+
+const nightLights=[]; // emissive materials toggled
+const BUILD = {
+  sofa(g,W,D,H,f){ const back=220, mat=f.fabric==='cream'?MAT.cream:MAT.greige, mat2=f.fabric==='cream'?MAT.linen:MAT.greige2, arm=f.arms?170:0;
+    B(g,-W/2+30,W/2-30,-D/2+30,D/2-30,0,90,MAT.walnut);
+    B(g,-W/2,W/2,-D/2,D/2,90,420,mat,40);
+    const iw=W-2*arm, n=Math.max(1,Math.round(iw/800)), cw=iw/n;
+    for(let i=0;i<n;i++){ const u0=-W/2+arm+i*cw; B(g,u0+10,u0+cw-10,-D/2+20,D/2-back,420,560,mat,60); B(g,u0+15,u0+cw-15,D/2-back-130,D/2-20,420,H,mat2,70); }
+    B(g,-W/2,W/2,D/2-back+60,D/2,420,H-120,mat,30);
+    if(f.arms){ for(const u of [-W/2,W/2-arm]) B(g,u,u+arm,-D/2,D/2,90,620,mat,60); }
+    B(g,-W/2+arm+100,-W/2+arm+500,D/2-back-200,D/2-back-60,520,900,f.fabric==='cream'?MAT.olive:MAT.olive,80);
+    if(W>2000) B(g,W/2-arm-500,W/2-arm-100,D/2-back-200,D/2-back-60,520,880,f.fabric==='cream'?MAT.art1:MAT.cream,80);
+  },
+  coffee(g,W,D,H){ B(g,-W/2+60,W/2-60,-D/2+60,D/2-60,0,H-40,MAT.oak,10); B(g,-W/2,W/2,-D/2,D/2,H-40,H,MAT.marble,15); C(g,0,-D*0.15,90,H,H+120,MAT.potw,20,70); S(g,0,-D*0.15,H+190,90,MAT.leaf); B(g,-W*0.25,W*0.2,D*0.1,D*0.35,H,H+40,MAT.olive,5); },
+  side(g,W,D,H){ C(g,0,0,W/2,H-30,H,MAT.marble,32); C(g,0,0,30,0,H-30,MAT.brass,12); C(g,0,0,W*0.35,0,20,MAT.brass,24); },
+  rug(g,W,D,H,f){ B(g,-W/2,W/2,-D/2,D/2,2,12,f.tone==='light'?MAT.rugLight:(f.room==='bedroom'?MAT.rug2:(f.room==='kids'?MAT.rugKid:MAT.rug)),5).castShadow=false; },
+  rug_round(g,W,D,H,f){ C(g,0,0,W/2,2,12,f.room==='kids'?MAT.rugKid:MAT.rug2,48).castShadow=false; },
+  tvwall(g,W,D,H){ B(g,-W/2,W/2,-D/2+40,D/2,0,H,MAT.walnut); for(let u=-W/2+20;u<W/2-30;u+=70) B(g,u,u+40,-D/2,-D/2+40,0,H,MAT.oak); const l=B(g,-W/2,W/2,-D/2-10,-D/2,H-30,H,MAT.led); nightLights.push(MAT.led); },
+  tvunit(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,240,520,MAT.walnut,10); B(g,-W/2+20,W/2-20,-D/2-2,-D/2,250,510,MAT.oak); for(const u of [-W/4,W/4]) B(g,u-2,u+2,-D/2-4,-D/2,260,500,MAT.walnut); C(g,W/2-200,0,70,520,800,MAT.potw,20,50); S(g,W/2-200,0,880,110,MAT.leaf); B(g,-W/2+150,-W/2+450,-60,60,520,560,MAT.charcoal); },
+  tv(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,0,H,MAT.screen,8); },
+  desk(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,H-30,H,MAT.oak,8); for(const u of [-W/2+40,W/2-60]) B(g,u,u+20,-D/2+40,D/2-40,0,H-30,MAT.black); B(g,-W/2+40,W/2-40,D/2-60,D/2-40,H-250,H-30,MAT.black);
+    B(g,-260,260,D/2-220,D/2-180,H+40,H+360,MAT.screen,5); B(g,-30,30,D/2-180,D/2-150,H,H+80,MAT.charcoal); B(g,-200,200,-60,80,H,H+15,MAT.charcoal,3); C(g,W/2-180,D/2-150,70,H,H+40,MAT.brass); C(g,W/2-180,D/2-150,10,H+40,H+380,MAT.brass,8); C(g,W/2-180,D/2-150,80,H+380,H+470,MAT.lightOn,20,40); nightLights.push(MAT.lightOn); },
+  chair_office(g,W,D,H){ C(g,0,0,260,0,30,MAT.black,5); C(g,0,0,25,30,430,MAT.black,10); B(g,-240,240,-230,230,430,500,MAT.charcoal,40); B(g,-230,230,190,240,520,H,MAT.charcoal,40); },
+  shelf(g,W,D,H){ const t=25; B(g,-W/2,-W/2+t,-D/2,D/2,0,H,MAT.oak); B(g,W/2-t,W/2,-D/2,D/2,0,H,MAT.oak); B(g,-W/2,W/2,D/2-10,D/2,0,H,MAT.walnut);
+    const n=5; for(let i=0;i<=n;i++){ const z=i*(H-t)/n; B(g,-W/2,W/2,-D/2,D/2,z,z+t,MAT.oak); if(i<n){ let u=-W/2+t+10; while(u<W/2-80){ const bw=25+rnd()*30, bh=180+rnd()*90; if(rnd()<0.15){u+=60;continue;} B(g,u,u+bw,-D/2+40,D/2-30,z+t,z+t+bh,books[Math.floor(rnd()*books.length)]); u+=bw+3; } } } },
+  armchair(g,W,D,H,f){ const mat=f.room==='bedroom'?MAT.cream:MAT.olive; for(const [u,v] of [[-W/2+60,-D/2+60],[W/2-60,-D/2+60],[-W/2+60,D/2-60],[W/2-60,D/2-60]]) C(g,u,v,18,0,150,MAT.oak,8,14);
+    B(g,-W/2,W/2,-D/2,D/2,150,400,mat,60); B(g,-W/2+120,W/2-120,-D/2+20,D/2-150,400,480,mat,60); B(g,-W/2,W/2,D/2-170,D/2,400,H,mat,70); B(g,-W/2,-W/2+130,-D/2+30,D/2-100,400,620,mat,60); B(g,W/2-130,W/2,-D/2+30,D/2-100,400,620,mat,60); },
+  plant(g,W,D,H){ C(g,0,0,W*0.4,0,W*0.9,MAT.pot,24,W*0.45); for(let i=0;i<9;i++){ const a=i*2.4, r=W*0.25*rnd(); S(g,Math.cos(a)*r,Math.sin(a)*r,W*0.9+(H-W*0.9)*(0.3+0.7*rnd()),W*0.32,i%2?MAT.leaf:MAT.leaf2,1,1.3,1); } C(g,0,0,12,W*0.9,H*0.85,MAT.walnut,6); },
+  floorlamp(g,W,D,H){ C(g,0,0,W*0.4,0,25,MAT.charcoal); C(g,0,0,12,25,H-250,MAT.brass,8); C(g,0,0,W*0.5,H-280,H,MAT.lightOn,24,W*0.38); nightLights.push(MAT.lightOn); },
+  shoe(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,150,H,MAT.oak,10); for(let k=1;k<3;k++){const u=-W/2+k*W/3; B(g,u-2,u+2,-D/2-3,-D/2,170,H-20,MAT.walnut);} B(g,-W/2,W/2,-D/2,D/2,H,H+20,MAT.marble); C(g,-W/4,0,60,H+20,H+260,MAT.potw,20,45); S(g,-W/4,0,H+330,100,MAT.leaf); B(g,W/4-60,W/4+60,-60,60,H+20,H+40,MAT.brass); },
+  mirror(g,W,D,H){ B(g,-W/2-15,W/2+15,-D/2,D/2,-15,H+15,MAT.brass,8); B(g,-W/2,W/2,-D/2-3,D/2-5,0,H,MAT.mirror); },
+  bench_hall(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,H-60,H,MAT.oak,10); B(g,-W/2+20,W/2-20,-D/2+20,D/2-20,H,H+60,MAT.cream,30); for(const u of [-W/2+40,W/2-60]) B(g,u,u+20,-D/2+40,D/2-40,0,H-60,MAT.black); },
+  stool(g,W,D,H){ C(g,0,0,W/2-20,H-60,H,MAT.olive,28); C(g,0,0,W/2-40,H-80,H-60,MAT.oak,28); for(let i=0;i<4;i++){const a=i*Math.PI/2+0.78,m=C(g,Math.cos(a)*120,Math.sin(a)*120,12,0,H-80,MAT.black,6);} const ring=new THREE.Mesh(new THREE.TorusGeometry(0.14,0.008,6,24),MAT.brass); ring.rotation.x=Math.PI/2; ring.position.y=0.3; g.add(ring); },
+  bar_base(g,W,D,H){ B(g,-W/2,W/2,-D/2+20,D/2,0,100,MAT.charcoal); B(g,-W/2,W/2,-D/2+50,D/2,100,870,MAT.oak); const n=Math.round(W/600); for(let i=1;i<n;i++){const u=-W/2+i*W/n; B(g,u-2,u+2,-D/2+46,-D/2+50,110,860,MAT.walnut);} for(let i=0;i<n;i++){const u=-W/2+(i+0.5)*W/n; B(g,u-150,u+150,-D/2+35,-D/2+50,800,815,MAT.brass);} B(g,-W/2,W/2,-D/2,D/2,870,900,MAT.quartz); },
+  bar_top(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,H-40,H,MAT.oak,8); B(g,-W/2+430,-W/2+470,-D/2,D/2,900,H-40,MAT.oak); for(const v of [-D/2+80,D/2-80]) C(g,-W/2+180,v,20,0,H-40,MAT.brass,10); },
+  base(g,W,D,H){ B(g,-W/2,W/2,-D/2+50,D/2,0,100,MAT.charcoal); B(g,-W/2,W/2,-D/2+20,D/2,100,870,MAT.oak); const n=Math.max(1,Math.round(W/600)); for(let i=1;i<n;i++){const u=-W/2+i*W/n; B(g,u-2,u+2,-D/2+16,-D/2+20,110,860,MAT.walnut);} for(let i=0;i<n;i++){const u=-W/2+(i+0.5)*W/n; B(g,u-150,u+150,-D/2+5,-D/2+20,800,815,MAT.brass);} B(g,-W/2,W/2,-D/2,D/2,870,900,MAT.quartz);
+    // backsplash
+    B(g,-W/2,W/2,D/2-12,D/2,900,1450,std('#F3EEE6',{roughness:0.25})); },
+  cooktop(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,900,908,MAT.black); for(const [u,v] of [[-170,-110],[170,-110],[-170,110],[170,110]]) C(g,u,v,80,908,915,MAT.charcoal,20); B(g,-W/2,W/2,-D/2-50,-D/2-20,500,850,MAT.black); },
+  hood(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,0,120,MAT.charcoal,5); B(g,-140,140,-60,D/2,120,3000-1650,MAT.charcoal); },
+  sink(g,W,D,H){ B(g,-W/2+40,W/2-40,-D/2+40,D/2-40,880,904,MAT.charcoal); const m=new THREE.Mesh(new THREE.TorusGeometry(0.12,0.012,8,24,Math.PI),MAT.black); m.position.set(0,1.02,-(D/2-60)*M); g.add(m); C(g,0,D/2-60,14,900,1020,MAT.black,8); },
+  washer(g,W,D,H){ const m=C(g,0,-D/2-1,190,0,4,MAT.steel,32); m.rotation.x=Math.PI/2; m.position.set(0,0.45,(D/2+5)*M); const m2=C(g,0,0,150,0,6,MAT.glass,32); m2.rotation.x=Math.PI/2; m2.position.set(0,0.45,(D/2+8)*M); },
+  upper(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,0,H,MAT.white,6); const n=Math.max(1,Math.round(W/500)); for(let i=1;i<n;i++){const u=-W/2+i*W/n; B(g,u-2,u+2,-D/2-2,-D/2,10,H-10,std('#d9d2c6'));} for(let i=0;i<n;i++){const u=-W/2+(i+0.5)*W/n; B(g,u-120,u+120,-D/2-15,-D/2,10,25,MAT.brass);} const l=B(g,-W/2+20,W/2-20,-D/2+20,D/2-20,-10,0,MAT.led); },
+  fridge(g,W,D,H,f){ B(g,-W/2,W/2,-D/2,D/2,0,H,f&&f.white?MAT.white:std('#E4DED4',{roughness:0.35,metalness:0.2}),15); B(g,-W/2,W/2,-D/2-3,-D/2,H*0.62,H*0.62+8,MAT.charcoal); for(const z of [H*0.35,H*0.75]) B(g,W/2-80,W/2-60,-D/2-40,-D/2,z,z+400,MAT.steel); },
+  tall(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,0,H,MAT.oak,6); B(g,-W/2+40,-W/2+60,-D/2-25,-D/2,H*0.4,H*0.6,MAT.brass); },
+  pendant(g,W,D,H,f){ C(g,0,0,4,H,3000-f.z,MAT.black,4); C(g,0,0,W/2,0,H,MAT.lightOn,24,W/5); nightLights.push(MAT.lightOn); },
+  cab_shallow(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,0,H,MAT.white,6); B(g,-W/2,W/2,-D/2,D/2,0,100,MAT.oak); const n=Math.max(1,Math.round(W/450)); for(let i=1;i<n;i++){const u=-W/2+i*W/n; B(g,u-2,u+2,-D/2-2,-D/2,110,H-10,std('#d9d2c6'));} for(let i=0;i<n;i++){const u=-W/2+(i+0.5)*W/n+(i%2?-150:150); B(g,u-8,u+8,-D/2-20,-D/2,H/2-200,H/2+200,MAT.brass);} },
+  art(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,0,H,MAT.frame); B(g,-W/2+40,W/2-40,-D/2-3,D/2,40,H-40,MAT.art3); B(g,-W/2+100,0,-D/2-6,-D/2-3,120,H*0.6,MAT.art1); C(g,W/6,-D/2-6,W/6,H*0.55,H*0.55+5,MAT.art2,24).rotation.x=Math.PI/2; },
+  headwall(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,0,H+400,MAT.oak); const n=6, pw=(W-1600)/1; for(let i=0;i<5;i++){ const u0=-W/2+800+i*((W-1600)/5); B(g,u0+10,u0+(W-1600)/5-10,-D/2-50,-D/2,350,H,MAT.cream,40);} B(g,-W/2,W/2,-D/2-10,-D/2,H+380,H+400,MAT.led); },
+  bed(g,W,D,H,f){ const frame=f.kid?MAT.oak:MAT.walnut; B(g,-W/2,W/2,-D/2,D/2,60,300,frame,20); B(g,-W/2+80,W/2-80,-D/2+80,D/2-80,0,60,MAT.charcoal);
+    B(g,-W/2+40,W/2-40,-D/2+30,D/2-90,300,H+20,MAT.linen,60);
+    const duvet=f.kid?(f.tint==='#9fb7c9'?MAT.blueKid:MAT.sandKid):MAT.greige; B(g,-W/2+20,W/2-20,-D/2+10,D/2-600,H-30,H+60,duvet,50);
+    B(g,-W/2+10,W/2-10,-D/2+5,-D/2+420,H+40,H+80,f.kid?MAT.cream:MAT.olive,30);
+    const n=W>1500?2:1, pw=(W-140)/n; for(let i=0;i<n;i++) B(g,-W/2+70+i*pw+20,-W/2+70+(i+1)*pw-20,D/2-500,D/2-120,H+20,H+190,MAT.linen,70);
+    if(f.kid) B(g,-W/2,W/2,D/2-60,D/2,0,800,MAT.oak,20); },
+  nightstand(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,150,H,MAT.oak,10); B(g,-W/2+20,W/2-20,-D/2-3,-D/2,H/2+70,H/2+74,MAT.walnut); B(g,-60,60,-D/2-12,-D/2,H-90,H-80,MAT.brass); },
+  lamp(g,W,D,H){ C(g,0,0,W*0.3,0,H*0.55,MAT.potw,20,W*0.18); C(g,0,0,W/2,H*0.55,H,MAT.lightOn,24,W*0.38); nightLights.push(MAT.lightOn); },
+  wardrobe(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,0,H,MAT.white,8); const n=Math.max(2,Math.round(W/700)); for(let i=0;i<n;i++){const u0=-W/2+i*W/n; B(g,u0+5,u0+W/n-5,-D/2-(i%2?30:10),-D/2,30,H-30,i%2?MAT.oak:MAT.white,4); B(g,u0+(i%2?40:W/n-60),u0+(i%2?60:W/n-40),-D/2-(i%2?45:25),-D/2-(i%2?30:10),H*0.35,H*0.65,MAT.brass);} },
+  dresser(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,120,H,MAT.oak,10); for(let k=1;k<3;k++){const z=120+k*(H-120)/3; B(g,-W/2+10,W/2-10,-D/2-3,-D/2,z-2,z+2,MAT.walnut);} B(g,-W/2,W/2,-D/2,D/2,H,H+15,MAT.marble); C(g,-W/4,0,60,H+15,H+200,MAT.potw,20,40); S(g,-W/4,0,H+260,90,MAT.leaf); },
+  chair_kid(g,W,D,H){ for(const [u,v] of [[-W/2+40,-D/2+40],[W/2-40,-D/2+40],[-W/2+40,D/2-40],[W/2-40,D/2-40]]) C(g,u,v,15,0,430,MAT.oak,8); B(g,-W/2,W/2,-D/2,D/2,430,470,MAT.white,10); B(g,-W/2,W/2,D/2-40,D/2,470,H,MAT.white,10); },
+  shelfwall(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2+150,0,25,MAT.oak); for(let i=0;i<5;i++) B(g,-W/2+60+i*60,-W/2+100+i*60,-D/2,D/2+120,25,200+rnd()*60,books[i%books.length]); },
+  shower(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,0,25,MAT.charcoal); B(g,-W/2,-W/2+10,-D/2,D/2-350,25,H,MAT.glass); B(g,-W/2-5,-W/2+15,-D/2,D/2-350,H-20,H,MAT.black); B(g,W/2-12,W/2,-D/2,D/2,25,2400,MAT.tileWall); B(g,-W/2,W/2,-D/2,-D/2+12,25,2400,MAT.tileWall); C(g,W/2-300,-D/2+300,130,2150,2170,MAT.black,24); B(g,W/2-320,W/2-280,-D/2+12,-D/2+300,2170,2190,MAT.black); C(g,W/2-30,0,20,900,1150,MAT.black,8); },
+  wc(g,W,D,H){ B(g,-W/2+20,W/2-20,D/2-120,D/2,250,1150,MAT.white,15); const bowl=mesh(new THREE.CylinderGeometry(0.19,0.15,0.3,24),MAT.white); bowl.scale.set(1,1,1.4); bowl.position.set(0,0.27,0.04); g.add(bowl); B(g,-190,190,-D/2+20,D/2-120,410,430,MAT.white,10); B(g,-60,60,D/2-125,D/2-120,1000,1080,MAT.black); },
+  vanity(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,450,H-30,MAT.oak,8); B(g,-W/2,W/2,-D/2,D/2,H-30,H,MAT.quartz,6); C(g,0,0,170,H,H+20,MAT.white,32,190); C(g,0,D/2-60,12,H,H+220,MAT.black,8); B(g,-12,12,D/2-200,D/2-60,H+200,H+220,MAT.black); },
+  towel(g,W,D,H){ for(const z of [0,250,500,750]) B(g,-W/2,W/2,-D/2,D/2,z,z+20,MAT.black); B(g,-W/2-5,W/2+5,-D/2+40,-D/2+60,100,600,MAT.cream,10); },
+  basin(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,550,H-30,MAT.walnut,8); B(g,-W/2,W/2,-D/2,D/2,H-30,H,MAT.marble,6); C(g,0,-20,150,H,H+130,MAT.white,32,170); C(g,0,D/2-60,12,H,H+220,MAT.brass,8); },
+  bistro_table(g,W,D,H){ C(g,0,0,W/2,H-25,H,MAT.marble,32); C(g,0,0,20,0,H-25,MAT.black,8); C(g,0,0,W*0.3,0,15,MAT.black,24); },
+  bistro_chair(g,W,D,H){ for(const [u,v] of [[-W/2+40,-D/2+40],[W/2-40,-D/2+40],[-W/2+40,D/2-40],[W/2-40,D/2-40]]) C(g,u,v,10,0,450,MAT.black,6); B(g,-W/2,W/2,-D/2,D/2,450,480,MAT.oak,10); B(g,-W/2,W/2,D/2-30,D/2,480,H,MAT.oak,10); },
+  pouf(g,W,D,H){ C(g,0,0,W/2,0,H,MAT.olive,28); C(g,0,0,W/2-10,H-5,H+10,MAT.olive,28,W/2-40); },
+  bathtub(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,0,H-40,MAT.white,10); B(g,-W/2,W/2,-D/2,D/2,H-40,H,MAT.white,15); B(g,-W/2+90,W/2-90,-D/2+90,D/2-90,H-60,H+1,MAT.water,60);
+    B(g,-W/2,W/2,D/2,D/2+12,0,2100,MAT.tileWall); B(g,W/2,W/2+12,-D/2,D/2+12,0,2100,MAT.tileWall);
+    B(g,-120,120,D/2-30,D/2,H+120,H+170,MAT.black,5); B(g,-15,15,D/2-140,D/2-30,H+130,H+160,MAT.black); C(g,-W/2+250,D/2-25,25,H+300,H+1500,MAT.black,8); C(g,-W/2+250,D/2-60,45,H+1450,H+1520,MAT.black,16); },
+  fan(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,0,H,MAT.white,8); C(g,0,-D/2-2,W*0.38,0,4,MAT.charcoal,24).rotation.x=Math.PI/2; },
+  washer_free(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,20,H,MAT.white,15); B(g,-W/2+10,W/2-10,-D/2-2,-D/2,H-140,H-20,std('#E9E6E0')); const m=C(g,0,-D/2-1,W*0.3,0,6,MAT.steel,32); m.rotation.x=Math.PI/2; m.position.set(0,(H*0.45)*M,(D/2+4)*M); const m2=C(g,0,0,W*0.24,0,8,MAT.glass,32); m2.rotation.x=Math.PI/2; m2.position.set(0,(H*0.45)*M,(D/2+8)*M); },
+  ac(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,0,H,MAT.white,40); B(g,-W/2+40,W/2-40,-D/2-2,-D/2+40,30,70,MAT.charcoal,5); },
+  planter(g,W,D,H){ B(g,-W/2,W/2,-D/2,D/2,0,350,MAT.potw,30); for(let i=0;i<6;i++) S(g,(rnd()-0.5)*W*0.5,(rnd()-0.5)*D*0.5,400+rnd()*250,W*0.3,i%2?MAT.leaf:MAT.leaf2,1,1.4,1); }
+};
+const WALL_TYPES=new Set(['bathtub','tvwall','tvunit','tv','desk','shelf','shoe','mirror','bench_hall','base','cooktop','hood','sink','washer','upper','fridge','tall','cab_shallow','art','headwall','nightstand','lamp','wardrobe','dresser','shelfwall','wc','vanity','towel','basin']);
+function autoFront(f){
+  if(f.front) return f.front;
+  if(f.type==='sofa') return {left:'E',bottom:'N',right:'W',top:'S'}[f.back];
+  if(f.type==='bed') return f.pillows==='bottom'?'N':'E';
+  if(!WALL_TYPES.has(f.type)) return 'S';
+  const r=ROOMS[f.room]; const xs=r.poly.map(p=>p[0]), ys=r.poly.map(p=>p[1]);
+  const d={W:f.x-f.w/2-Math.min(...xs), E:Math.max(...xs)-(f.x+f.w/2), S:f.y-f.d/2-Math.min(...ys), N:Math.max(...ys)-(f.y+f.d/2)};
+  // kitchen right run sits against x=8090
+  if(f.room==='kitchen'&&f.x>7400) d.E=8090-(f.x+f.w/2);
+  const near=Object.entries(d).sort((a,b)=>a[1]-b[1])[0][0];
+  return {W:'E',E:'W',S:'N',N:'S'}[near];
+}
+const pickables=[];
+const furnGroup=new THREE.Group(); root.add(furnGroup);
+for(const f of A.furniture){
+  const fn=BUILD[f.type]; if(!fn) continue;
+  const front=autoFront(f);
+  const extra={S:0,N:180,E:90,W:-90}[front];
+  const swap=(front==='E'||front==='W');
+  const Wd=swap?f.d:f.w, Dd=swap?f.w:f.d;
+  const g=new THREE.Group();
+  fn(g,Wd,Dd,f.h,f);
+  g.position.set(f.x*M,(f.z||0)*M,-f.y*M);
+  g.rotation.y=THREE.MathUtils.degToRad(f.rot+extra);
+  g.userData.item=f;
+  furnGroup.add(g); pickables.push(g);
+}
+
+// ---------- night lights ----------
+const roomLights=[];
+for(const r of A.rooms){ if(r.floor==='none') continue; const xs=r.poly.map(p=>p[0]),ys=r.poly.map(p=>p[1]); const cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2; const pl=new THREE.PointLight('#ffe0b8',0,9,1.7); pl.position.set(cx*M,2.6,-cy*M); pl.userData.base=r.area>12?6:(r.area>5?3.5:2); scene.add(pl); roomLights.push(pl); }
+
+// ---------- room labels ----------
+const labels=[];
+const labelPos={reception:[3650,8750],kids:[1100,4250],bedroom:[6200,7750],hall:[4300,4250],kitchen:[6950,4550],bath:[6600,1500],lobby:[5290,1450],balcony:[500,8600],passage:[5400,6470],shaft:[7665,2880]};
+for(const r of A.rooms){ const d=document.createElement('div'); d.className='rlabel'; d.innerHTML=`${r.name}<small>${r.area.toFixed(1)} م²</small>`; const o=new CSS2DObject(d); const p=labelPos[r.id]; o.position.set(p[0]*M,1.0,-p[1]*M); scene.add(o); labels.push(o); }
+
+// ---------- state & camera moves ----------
+const state={room:'all',inside:false,cut:true,top:false,night:false,labels:true};
+let anim=null;
+function flyTo(pos,tgt,ms=900){ const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches; if(reduce){camera.position.copy(pos);controls.target.copy(tgt);return;} anim={p0:camera.position.clone(),t0:controls.target.clone(),p1:pos,t1:tgt,start:performance.now(),ms}; }
+function roomCenter(id){ const r=ROOMS[id]; const xs=r.poly.map(p=>p[0]),ys=r.poly.map(p=>p[1]); return {cx:(Math.min(...xs)+Math.max(...xs))/2*M, cy:(Math.min(...ys)+Math.max(...ys))/2*M, w:(Math.max(...xs)-Math.min(...xs))*M, d:(Math.max(...ys)-Math.min(...ys))*M}; }
+function overview(){ const asp=camera.aspect; const dist=asp<0.8?21:15; if(state.top) return [new THREE.Vector3(CX,dist*1.15,-CY+0.01),new THREE.Vector3(CX,0,-CY)]; return [new THREE.Vector3(CX+dist*0.25,dist*0.82,-CY+dist*0.62),new THREE.Vector3(CX,0,-CY)]; }
+function applyView(){
+  camera.fov = state.inside?(camera.aspect<0.8?80:64):45; camera.updateProjectionMatrix();
+  labels.forEach(l=>l.visible=state.labels&&!state.inside);
+  if(state.inside && state.room!=='all' && ROOMS[state.room].cam){ const c=ROOMS[state.room].cam; flyTo(new THREE.Vector3(c.pos[0]*M,c.pos[2]*M,-c.pos[1]*M),new THREE.Vector3(c.tgt[0]*M,c.tgt[2]*M,-c.tgt[1]*M)); }
+  else if(state.room==='all'){ const [p,t]=overview(); flyTo(p,t); }
+  else { const c=roomCenter(state.room); const s=Math.max(c.w,c.d); const k=Math.max(4.5,s*1.5)*(camera.aspect<0.8?1.45:1); if(state.top) flyTo(new THREE.Vector3(c.cx,k*1.3,-c.cy+0.01),new THREE.Vector3(c.cx,0,-c.cy)); else flyTo(new THREE.Vector3(c.cx+k*0.35,k*0.9,-c.cy+k*0.75),new THREE.Vector3(c.cx,0.4,-c.cy)); }
+  applyWalls();
+}
+function applyWalls(){
+  const cut = state.cut && !state.inside; const CUT=1300;
+  for(const m of wallMeshes){ const u=m.userData;
+    if(u.kind==='parapet'){continue;}
+    if(u.kind==='glass'||u.kind==='frame'||u.kind==='lintel'||u.kind==='sillstone'||u.kind==='door'){ m.visible = !cut || u.z1<=CUT+1 || (u.kind==='glass'||u.kind==='door'); if(cut&&(u.kind==='glass'||u.kind==='door')){ const z1=Math.min(u.z1,CUT); m.scale.y=Math.max(0.001,(z1-u.z0)/(u.z1-u.z0)); m.position.y=(u.z0+(z1-u.z0)/2)*M; m.visible=z1>u.z0; } else if(u.kind==='glass'||u.kind==='door'){ m.scale.y=1; m.position.y=(u.z0+u.z1)/2*M; } continue; }
+    const h=u.h; const nh=cut?Math.min(h,CUT):h; m.scale.y=nh/h; m.position.y=nh/2*M;
+  }
+  ceil.visible = state.inside;
+  // hide high items in cut mode
+  for(const g of pickables){ const f=g.userData.item; const tallScale=(cut && f.h>1300 && !['plant','floorlamp','tvwall','tv','upper','hood','pendant'].includes(f.type) && !(f.z>0))?1300/f.h:1; g.scale.y=tallScale; if(['upper','hood','pendant','art','mirror','shelfwall','towel','tvwall','tv','ac','fan'].includes(f.type)) g.visible = !cut || ((f.z||0) < CUT && f.type!=='pendant' && f.type!=='hood' && f.type!=='upper'); }
+}
+function applyNight(){
+  const n=state.night; scene.background = n?NIGHT_BG:DAY_BG; hemi.intensity=n?0.12:0.55; sun.intensity=n?0:1.7; scene.environment = n?null:envTex;
+  renderer.toneMappingExposure = n?1.2:0.85;
+  for(const l of roomLights) l.intensity = n?l.userData.base:0;
+  MAT.lightOn.emissiveIntensity = n?2.2:0.15; MAT.led.emissiveIntensity = n?3:0.2;
+}
+function setPressed(id,v){document.getElementById(id).setAttribute('aria-pressed',String(v));}
+
+// chips
+const chipDefs=[['all','الشقة كلها'],['reception','الريسبشن'],['kitchen','المطبخ'],['bedroom','النوم'],['kids','الأطفال'],['hall','الطرقة'],['bath','الحمام'],['lobby','اللوبي'],['balcony','البلكونة']];
+const chipBox=document.getElementById('roomChips');
+chipBox.innerHTML=chipDefs.map(([id,n])=>`<button class="chip" data-r="${id}" aria-pressed="${id==='all'}">${n}</button>`).join('');
+function selectRoom(id){ state.room=id; if(id==='all'&&state.inside){state.inside=false;setPressed('btnInside',false);} chipBox.querySelectorAll('.chip').forEach(c=>{const on=c.dataset.r===id;c.setAttribute('aria-pressed',String(on));if(on)c.scrollIntoView({block:'nearest',inline:'nearest'});}); applyView(); }
+chipBox.addEventListener('click',e=>{const b=e.target.closest('.chip'); if(b) selectRoom(b.dataset.r);});
+document.getElementById('btnInside').onclick=()=>{ state.inside=!state.inside; if(state.inside&&state.room==='all'){ state.room='reception'; chipBox.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',String(c.dataset.r==='reception'))); } if(state.inside){state.top=false;setPressed('btnTop',false);} setPressed('btnInside',state.inside); applyView(); };
+document.getElementById('btnCut').onclick=()=>{ state.cut=!state.cut; setPressed('btnCut',state.cut); applyWalls(); };
+document.getElementById('btnTop').onclick=()=>{ state.top=!state.top; if(state.top){state.inside=false;setPressed('btnInside',false);} setPressed('btnTop',state.top); applyView(); };
+document.getElementById('btnNight').onclick=()=>{ state.night=!state.night; setPressed('btnNight',state.night); applyNight(); };
+document.getElementById('btnLabels').onclick=()=>{ state.labels=!state.labels; setPressed('btnLabels',state.labels); labels.forEach(l=>l.visible=state.labels&&!state.inside); };
+document.querySelectorAll('.room button[data-room]').forEach(b=>b.addEventListener('click',()=>{ document.getElementById('model3d').scrollIntoView({behavior:'smooth',block:'start'}); state.inside=true; setPressed('btnInside',true); state.top=false; setPressed('btnTop',false); selectRoom(b.dataset.room); }));
+
+// picking
+const ray=new THREE.Raycaster(), ptr=new THREE.Vector2(); const info=document.getElementById('info');
+let downAt=null;
+renderer.domElement.addEventListener('pointerdown',e=>{downAt=[e.clientX,e.clientY];});
+renderer.domElement.addEventListener('pointerup',e=>{
+  if(!downAt||Math.hypot(e.clientX-downAt[0],e.clientY-downAt[1])>6) return;
+  const rc=renderer.domElement.getBoundingClientRect(); ptr.set(((e.clientX-rc.left)/rc.width)*2-1,-((e.clientY-rc.top)/rc.height)*2+1);
+  ray.setFromCamera(ptr,camera); const hits=ray.intersectObjects(pickables.filter(g=>g.visible),true);
+  const hit=hits.find(h=>{let o=h.object;while(o&&!o.userData.item)o=o.parent;return o&&!o.userData.item.type.startsWith('rug');})||hits[0];
+  if(!hit){info.hidden=true;return;}
+  let o=hit.object; while(o&&!o.userData.item) o=o.parent; const f=o.userData.item;
+  info.innerHTML=`<b>${f.label}</b><span>${ROOMS[f.room].name} · <span class="num" dir="ltr">${Math.round(f.w/10)}×${Math.round(f.d/10)}×${Math.round(f.h/10)} سم</span></span>`; info.hidden=false;
+});
+
+// resize + loop
+function resize(){ const w=viewer.clientWidth,h=viewer.clientHeight; renderer.setSize(w,h); labelR.setSize(w,h); camera.aspect=w/h; camera.updateProjectionMatrix(); }
+new ResizeObserver(resize).observe(viewer); resize();
+{const [p,t]=overview(); camera.position.copy(p); controls.target.copy(t);}
+applyWalls(); applyNight();
+document.getElementById('loading').remove();
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+renderer.setAnimationLoop(()=>{
+  if(anim){ const t=Math.min(1,(performance.now()-anim.start)/anim.ms), k=ease(t); camera.position.lerpVectors(anim.p0,anim.p1,k); controls.target.lerpVectors(anim.t0,anim.t1,k); if(t>=1) anim=null; }
+  controls.update(); renderer.render(scene,camera); labelR.render(scene,camera);
+});
+window.__three={state,selectRoom,applyView,camera,controls};
+</script>
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+}
+</script>
+</body>
+</html>
