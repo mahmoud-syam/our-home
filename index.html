@@ -111,6 +111,21 @@ main{flex:1}
 @keyframes rise{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
 .hero-art .tag{position:absolute;bottom:4%;inset-inline-start:12%;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:.82rem;box-shadow:0 8px 24px rgba(0,0,0,.08)}
 .hero-art .tag b{display:block;font-family:var(--display);font-size:1rem}
+
+/* hotspots on the hero render */
+.hotspots{position:absolute;inset:0;width:100%;height:100%;overflow:visible;animation:rise .9s .1s cubic-bezier(.2,.7,.2,1) both}
+.hotspots .dim{fill:#1d1a15;opacity:0;transition:opacity .35s ease;pointer-events:none}
+.hotspots.active .dim{opacity:.45}
+.hotspots .hs{fill:transparent;stroke:transparent;stroke-width:3;vector-effect:non-scaling-stroke;cursor:pointer;transition:fill .25s,stroke .25s}
+.hotspots .hs:hover,.hotspots .hs:focus-visible,.hotspots .hs.on{fill:rgba(255,248,232,.16);stroke:#FFF8E8;outline:none}
+.hotspots .pulse{fill:#FFF8E8;stroke:rgba(95,102,70,.9);stroke-width:2;vector-effect:non-scaling-stroke;pointer-events:none;transform-box:fill-box;transform-origin:center;animation:dot 2.4s ease-in-out infinite}
+.hotspots.active .pulse{opacity:0;transition:opacity .2s}
+@keyframes dot{0%,100%{transform:scale(1);opacity:.95}50%{transform:scale(1.6);opacity:.55}}
+.hs-label{position:absolute;transform:translate(50%,-120%);background:var(--ink);color:var(--paper);border-radius:12px;padding:7px 12px;font-size:.85rem;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s, transform .25s;box-shadow:0 10px 24px rgba(0,0,0,.25);z-index:3}
+.hs-label b{display:block;font-family:var(--display);font-size:1.05rem;line-height:1.2}
+.hs-label span{font-size:.78rem;opacity:.8}
+.hs-label.show{opacity:1;transform:translate(50%,-135%)}
+.hero-art.zoom img,.hero-art.zoom .hotspots{transition:transform .6s cubic-bezier(.5,0,.2,1),opacity .6s;opacity:0}
 @media (max-width:860px){
   .hero{padding:26px 0 36px}
   .hero .wrap{grid-template-columns:1fr}
@@ -231,7 +246,9 @@ footer .wrap{display:flex;justify-content:center;text-align:center;gap:12px;flex
       </div>
       <figure class="hero-art" style="margin:0">
         <img src="assets/hero.webp" alt="موديل 3D للشقة من فوق بالعفش" width="920" height="1052">
-        <figcaption class="tag"><b>أوضتين نوم + ريسبشن</b>مطبخ مقفول، حمام بانيو، بلكونة</figcaption>
+        <svg class="hotspots" id="hotspots" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-label="غرف الشقة"></svg>
+        <div class="hs-label" id="hsLabel" aria-hidden="true"><b></b><span>دوس وادخلها ←</span></div>
+        <figcaption class="tag"><b>مرّر على أي أوضة</b>ودوس عليها عشان تدخلها وتشوفها من جوه</figcaption>
       </figure>
     </div>
   </section>
@@ -597,6 +614,34 @@ const PALETTE = [
   burger.addEventListener('click',()=>{ const o=links.classList.toggle('open'); burger.setAttribute('aria-expanded',String(o)); });
   show(location.hash.slice(1)||'home',false);
   window.currentView=()=>current;
+  // ---------- hero hotspots: hover a room, click to walk into it ----------
+  const HS=[{"id": "reception", "poly": [[0.2588, 0.3939], [0.5382, 0.4788], [0.6977, 0.1657], [0.4394, 0.0952]], "c": [0.4859, 0.2758]}, {"id": "bedroom", "poly": [[0.542, 0.48], [0.8021, 0.559], [0.9407, 0.2319], [0.7012, 0.1666]], "c": [0.7487, 0.3514]}, {"id": "kids", "poly": [[0.0638, 0.5733], [0.2914, 0.6474], [0.4053, 0.4417], [0.1881, 0.3757]], "c": [0.2378, 0.5063]}, {"id": "kitchen", "poly": [[0.524, 0.7286], [0.6293, 0.7629], [0.6563, 0.7025], [0.7311, 0.7264], [0.8008, 0.562], [0.6288, 0.5097]], "c": [0.6655, 0.6434]}, {"id": "hall", "poly": [[0.2954, 0.6487], [0.518, 0.7212], [0.621, 0.5074], [0.409, 0.4429]], "c": [0.4614, 0.5766]}, {"id": "bath", "poly": [[0.4399, 0.8979], [0.6306, 0.9634], [0.7037, 0.7911], [0.5199, 0.7311]], "c": [0.5736, 0.8438]}, {"id": "lobby", "poly": [[0.3418, 0.8642], [0.4356, 0.8964], [0.5158, 0.7298], [0.4253, 0.7002]], "c": [0.4303, 0.7958]}, {"id": "balcony", "poly": [[0.1898, 0.3729], [0.2551, 0.3928], [0.436, 0.0943], [0.3754, 0.0778]], "c": [0.3182, 0.2276]}], NAMES=Object.fromEntries(window.APT.rooms.map(r=>[r.id,r.name]));
+  const svg=document.getElementById('hotspots'), lab=document.getElementById('hsLabel'), art=svg&&svg.closest('.hero-art');
+  if(svg){
+    const NS='http://www.w3.org/2000/svg', el=(n,a,p)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e;};
+    // dim only the drawn apartment (the render's own alpha), leaving the hovered room bright
+    const defs=el('defs',{});
+    const flt=el('filter',{id:'hsWhite',x:0,y:0,width:1,height:1},defs); el('feColorMatrix',{type:'matrix',values:'0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0'},flt);
+    const mask=el('mask',{id:'hsMask',maskUnits:'userSpaceOnUse',x:0,y:0,width:1000,height:1000},defs);
+    el('image',{href:art.querySelector('img').getAttribute('src'),x:0,y:0,width:1000,height:1000,preserveAspectRatio:'none',filter:'url(#hsWhite)'},mask);
+    const hole=el('polygon',{points:'',fill:'#000'},mask);
+    el('rect',{class:'dim',x:0,y:0,width:1000,height:1000,mask:'url(#hsMask)'});
+    const pts=p=>p.map(q=>q[0]*1000+','+q[1]*1000).join(' ');
+    let entering=false;
+    function on(h,poly){ svg.classList.add('active'); hole.setAttribute('points',pts(h.poly)); poly.classList.add('on');
+      lab.querySelector('b').textContent=NAMES[h.id]; lab.style.right=(100-h.c[0]*100)+'%'; lab.style.top=(h.c[1]*100)+'%'; lab.classList.add('show'); }
+    function off(poly){ svg.classList.remove('active'); poly.classList.remove('on'); lab.classList.remove('show'); }
+    function enter(h){ if(entering) return; entering=true; art.classList.add('zoom'); art.querySelector('img').style.transform=`scale(1.6) translate(${(0.5-h.c[0])*60}%,${(0.5-h.c[1])*60}%)`;
+      setTimeout(()=>{ window.goView('model'); if(window.__three) window.__three.enterRoom(h.id); else window.__pendingRoom=h.id;
+        setTimeout(()=>{ art.classList.remove('zoom'); art.querySelector('img').style.transform=''; entering=false; lab.classList.remove('show'); svg.classList.remove('active'); svg.querySelectorAll('.on').forEach(p=>p.classList.remove('on')); },400); }, 520); }
+    HS.forEach(h=>{
+      const poly=el('polygon',{class:'hs',points:pts(h.poly),tabindex:0,role:'link','aria-label':'ادخل '+NAMES[h.id]+' في الموديل 3D'});
+      poly.addEventListener('mouseenter',()=>on(h,poly)); poly.addEventListener('mouseleave',()=>off(poly));
+      poly.addEventListener('focus',()=>on(h,poly)); poly.addEventListener('blur',()=>off(poly));
+      poly.addEventListener('click',()=>enter(h)); poly.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); enter(h);} });
+    });
+    HS.forEach((h,i)=>{ const c=el('circle',{class:'pulse',cx:h.c[0]*1000,cy:h.c[1]*1000,r:7}); c.style.animationDelay=(i*0.25)+'s'; });
+  }
 })();
 </script>
 <script type="module">
@@ -966,7 +1011,9 @@ function frame(){
 function onShow(){ resize(); renderer.setAnimationLoop(frame); }
 function onHide(){ renderer.setAnimationLoop(null); }
 if(HEROSHOT){ document.body.appendChild(viewer); document.querySelectorAll('header,main,footer').forEach(e=>e.style.display='none'); viewer.style.cssText='position:fixed;inset:0;height:auto;max-height:none;min-height:0;border:0;border-radius:0;background:transparent;z-index:999'; document.body.style.background='transparent'; scene.background=null; renderer.setClearColor(0x000000,0); labels.forEach(l=>l.visible=false); state.labels=false; scene.getObjectByName('slab').visible=false; document.querySelectorAll('.v-top,.v-bottom').forEach(e=>e.style.display='none'); }
-window.__three={state,selectRoom,applyView,camera,controls,onShow,onHide,scene,renderer};
+function enterRoom(id){ state.inside=true; setPressed('btnInside',true); state.top=false; setPressed('btnTop',false); requestAnimationFrame(()=>selectRoom(id)); }
+window.__three={state,selectRoom,applyView,camera,controls,onShow,onHide,scene,renderer,THREE,enterRoom};
+if(window.__pendingRoom){ const r=window.__pendingRoom; window.__pendingRoom=null; enterRoom(r); }
 if(window.currentView && window.currentView()==='model') onShow();
 </script>
 <script>
