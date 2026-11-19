@@ -243,7 +243,7 @@ footer .wrap{display:flex;justify-content:center;text-align:center;gap:12px;flex
       <li><a href="#home" data-go="home">الرئيسية</a></li>
       <li><a href="#original" data-go="original"><b>01</b>المسقط الأصلي</a></li>
       <li><a href="#model" data-go="model"><b>02</b>الموديل 3D</a></li>
-      <li><a href="#renders" data-go="renders"><b>03</b>صور واقعية</a></li>
+      <li><a href="#renders" data-go="renders"><b>03</b>واقعي</a></li>
       <li><a href="#plan" data-go="plan"><b>04</b>المسقط بالعفش</a></li>
       <li><a href="#changes" data-go="changes"><b>05</b>التعديلات</a></li>
       <li><a href="#rooms" data-go="rooms"><b>06</b>الغرف</a></li>
@@ -315,7 +315,7 @@ footer .wrap{display:flex;justify-content:center;text-align:center;gap:12px;flex
   <!-- 03 RENDERS -->
   <section class="view page" data-view="renders" hidden aria-labelledby="h-renders">
     <div class="wrap">
-      <div class="page-head"><span class="step">03</span><h2 id="h-renders">صور واقعية</h2><p>لقطات من جوه كل أوضة بإضاءة الشمس من الشبابيك ولمبات السقف، وخامات حقيقية: خشب، قماش، بورسلين ورخام. دوس على أي صورة عشان تكبّرها.</p></div>
+      <div class="page-head"><span class="step">03</span><h2 id="h-renders">واقعي</h2><p>لقطات من جوه كل أوضة بإضاءة الشمس من الشبابيك ولمبات السقف، وخامات حقيقية: خشب، قماش، بورسلين ورخام. دوس على أي صورة عشان تكبّرها.</p></div>
       <div class="gallery" id="gallery"></div>
       <nav class="pager" aria-label="التنقل"></nav>
     </div>
@@ -624,7 +624,7 @@ const PALETTE = [
 <script>
 // ---------- router: one page at a time, plain #name hashes ----------
 (function(){
-  const ORDER=[['home','الرئيسية'],['original','المسقط الأصلي'],['model','الموديل 3D'],['renders','صور واقعية'],['plan','المسقط بالعفش'],['changes','التعديلات'],['rooms','الغرف'],['materials','الخامات'],['notes','ملاحظات']];
+  const ORDER=[['home','الرئيسية'],['original','المسقط الأصلي'],['model','الموديل 3D'],['renders','واقعي'],['plan','المسقط بالعفش'],['changes','التعديلات'],['rooms','الغرف'],['materials','الخامات'],['notes','ملاحظات']];
   const views=Object.fromEntries([...document.querySelectorAll('[data-view]')].map(v=>[v.dataset.view,v]));
   const links=document.getElementById('navLinks'), burger=document.getElementById('burger');
   // pagers
