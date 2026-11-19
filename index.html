@@ -203,6 +203,29 @@ main{flex:1}
 .notes ol{margin:0;padding-inline-start:1.2rem}
 .notes li{margin:.4rem 0;max-width:80ch}
 
+
+/* ---------- renders gallery ---------- */
+.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.shot{margin:0;position:relative;border-radius:16px;overflow:hidden;background:var(--panel);border:1px solid var(--line);cursor:zoom-in}
+.shot:first-child{grid-column:1/-1}
+.shot img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.shot:hover img{transform:scale(1.03)}
+.shot figcaption{position:absolute;inset-inline:0;bottom:0;padding:28px 18px 14px;color:#fff;background:linear-gradient(transparent,rgba(20,17,13,.72));display:flex;justify-content:space-between;align-items:end;gap:12px}
+.shot figcaption b{font-family:var(--display);font-size:1.25rem;font-weight:600}
+.shot figcaption span{font-size:.86rem;opacity:.9}
+.shot:focus-visible{outline:3px solid var(--oak);outline-offset:2px}
+.lightbox{position:fixed;inset:0;z-index:200;background:rgba(14,12,10,.92);display:flex;align-items:center;justify-content:center;padding:24px}
+.lightbox[hidden]{display:none}
+.lightbox figure{margin:0;max-width:min(1400px,100%);display:flex;flex-direction:column;gap:10px}
+.lightbox img{max-width:100%;max-height:calc(100vh - 110px);border-radius:10px;display:block;margin:0 auto}
+.lightbox figcaption{color:#EEE8DF;text-align:center;font-size:.95rem}
+.lightbox figcaption b{font-family:var(--display);font-size:1.1rem;margin-inline-end:8px}
+.lb-close,.lb-nav{position:absolute;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:999px;cursor:pointer;font-size:1.3rem;width:46px;height:46px;display:grid;place-items:center}
+.lb-close{top:16px;left:16px}
+.lb-prev{right:16px;top:50%;transform:translateY(-50%)}
+.lb-next{left:16px;top:50%;transform:translateY(-50%)}
+.lb-close:hover,.lb-nav:hover{background:rgba(255,255,255,.22)}
+@media (max-width:760px){ .gallery{grid-template-columns:1fr} .shot figcaption span{display:none} .lb-nav{top:auto;bottom:16px;transform:none} }
 footer{border-top:1px solid var(--line);padding:22px 0 30px;color:var(--muted);font-size:.84rem}
 footer .wrap{display:flex;justify-content:center;text-align:center;gap:12px;flex-wrap:wrap}
 @media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important;scroll-behavior:auto!important} }
@@ -220,11 +243,12 @@ footer .wrap{display:flex;justify-content:center;text-align:center;gap:12px;flex
       <li><a href="#home" data-go="home">الرئيسية</a></li>
       <li><a href="#original" data-go="original"><b>01</b>المسقط الأصلي</a></li>
       <li><a href="#model" data-go="model"><b>02</b>الموديل 3D</a></li>
-      <li><a href="#plan" data-go="plan"><b>03</b>المسقط بالعفش</a></li>
-      <li><a href="#changes" data-go="changes"><b>04</b>التعديلات</a></li>
-      <li><a href="#rooms" data-go="rooms"><b>05</b>الغرف</a></li>
-      <li><a href="#materials" data-go="materials"><b>06</b>الخامات</a></li>
-      <li><a href="#notes" data-go="notes"><b>07</b>ملاحظات</a></li>
+      <li><a href="#renders" data-go="renders"><b>03</b>صور واقعية</a></li>
+      <li><a href="#plan" data-go="plan"><b>04</b>المسقط بالعفش</a></li>
+      <li><a href="#changes" data-go="changes"><b>05</b>التعديلات</a></li>
+      <li><a href="#rooms" data-go="rooms"><b>06</b>الغرف</a></li>
+      <li><a href="#materials" data-go="materials"><b>07</b>الخامات</a></li>
+      <li><a href="#notes" data-go="notes"><b>08</b>ملاحظات</a></li>
     </ul>
   </div>
 </header>
@@ -288,10 +312,19 @@ footer .wrap{display:flex;justify-content:center;text-align:center;gap:12px;flex
     </div>
   </section>
 
+  <!-- 03 RENDERS -->
+  <section class="view page" data-view="renders" hidden aria-labelledby="h-renders">
+    <div class="wrap">
+      <div class="page-head"><span class="step">03</span><h2 id="h-renders">صور واقعية</h2><p>لقطات من جوه كل أوضة بإضاءة الشمس من الشبابيك ولمبات السقف، وخامات حقيقية: خشب، قماش، بورسلين ورخام. دوس على أي صورة عشان تكبّرها.</p></div>
+      <div class="gallery" id="gallery"></div>
+      <nav class="pager" aria-label="التنقل"></nav>
+    </div>
+  </section>
+
   <!-- 03 PLAN -->
   <section class="view page" data-view="plan" hidden aria-labelledby="h-plan">
     <div class="wrap">
-      <div class="page-head"><span class="step">03</span><h2 id="h-plan">المسقط بعد التعديل بالعفش</h2><p>توزيع العفش النهائي على المسقط المعدّل. المقاسات بالمللي زي ملف الأوتوكاد.</p></div>
+      <div class="page-head"><span class="step">04</span><h2 id="h-plan">المسقط بعد التعديل بالعفش</h2><p>توزيع العفش النهائي على المسقط المعدّل. المقاسات بالمللي زي ملف الأوتوكاد.</p></div>
       <div class="plan-layout">
         <div class="plan-box"><svg id="planSvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="مسقط الشقة بالعفش"></svg></div>
         <aside class="legend"><h3>المساحات بعد التعديل</h3><table id="legendAfter"></table><p>المساحات صافي من وش الحيطة.</p></aside>
@@ -303,7 +336,7 @@ footer .wrap{display:flex;justify-content:center;text-align:center;gap:12px;flex
   <!-- 04 CHANGES -->
   <section class="view page" data-view="changes" hidden aria-labelledby="h-changes">
     <div class="wrap">
-      <div class="page-head"><span class="step">04</span><h2 id="h-changes">التعديلات المعمارية</h2><p>المطبخ والمسقط، وغرفة النوم: قبل وبعد.</p></div>
+      <div class="page-head"><span class="step">05</span><h2 id="h-changes">التعديلات المعمارية</h2><p>المطبخ والمسقط، وغرفة النوم: قبل وبعد.</p></div>
       <div class="mods">
       <div class="mod">
         <h3>المطبخ والمسقط <span class="pill before">الأصلي</span></h3>
@@ -347,7 +380,7 @@ footer .wrap{display:flex;justify-content:center;text-align:center;gap:12px;flex
   <!-- 05 ROOMS -->
   <section class="view page" data-view="rooms" hidden aria-labelledby="h-rooms">
     <div class="wrap">
-      <div class="page-head"><span class="step">05</span><h2 id="h-rooms">تفاصيل كل غرفة</h2><p>العفش والتشطيب لكل أوضة، ومن كل كارت تقدر تدخل الأوضة في الموديل 3D.</p></div>
+      <div class="page-head"><span class="step">06</span><h2 id="h-rooms">تفاصيل كل غرفة</h2><p>العفش والتشطيب لكل أوضة، ومن كل كارت تقدر تدخل الأوضة في الموديل 3D.</p></div>
       <div class="rooms" id="roomCards"></div>
       <nav class="pager" aria-label="التنقل"></nav>
     </div>
@@ -356,7 +389,7 @@ footer .wrap{display:flex;justify-content:center;text-align:center;gap:12px;flex
   <!-- 06 MATERIALS -->
   <section class="view page" data-view="materials" hidden aria-labelledby="h-mat">
     <div class="wrap">
-      <div class="page-head"><span class="step">06</span><h2 id="h-mat">الخامات والألوان</h2><p>باليتة واحدة ماشية في الشقة كلها: خشب أوك، بيج ورملي، ولمسات أوليف ونحاسي.</p></div>
+      <div class="page-head"><span class="step">07</span><h2 id="h-mat">الخامات والألوان</h2><p>باليتة واحدة ماشية في الشقة كلها: خشب أوك، بيج ورملي، ولمسات أوليف ونحاسي.</p></div>
       <div class="palette" id="palette"></div>
       <nav class="pager" aria-label="التنقل"></nav>
     </div>
@@ -365,7 +398,7 @@ footer .wrap{display:flex;justify-content:center;text-align:center;gap:12px;flex
   <!-- 07 NOTES -->
   <section class="view page" data-view="notes" hidden aria-labelledby="h-notes">
     <div class="wrap">
-      <div class="page-head"><span class="step">07</span><h2 id="h-notes">ملاحظات قبل التنفيذ</h2><p>حاجات لازم تتأكد منها مع المهندس أو الصنايعي قبل ما تبدأ.</p></div>
+      <div class="page-head"><span class="step">08</span><h2 id="h-notes">ملاحظات قبل التنفيذ</h2><p>حاجات لازم تتأكد منها مع المهندس أو الصنايعي قبل ما تبدأ.</p></div>
       <div class="notes">
       <ol>
         <li>أماكن شبابيك غرفة النوم وأوضة الأطفال مش مرسومة في ملف الأوتوكاد، فحطيتها على الواجهة. لو مكانها مختلف، توزيع العفش في الغرفتين ممكن يتغير.</li>
@@ -379,6 +412,12 @@ footer .wrap{display:flex;justify-content:center;text-align:center;gap:12px;flex
     </div>
   </section>
 </main>
+    <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="عرض الصورة">
+  <button class="lb-close" id="lbClose" aria-label="قفل">✕</button>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="الصورة اللي قبلها">›</button>
+  <figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="الصورة اللي بعدها">‹</button>
+</div>
 
 <footer><div class="wrap"><span>شقتنا <span class="heart">&#10084;</span> · تصميم داخلي مودرن دافي</span></div></footer>
 
@@ -585,7 +624,7 @@ const PALETTE = [
 <script>
 // ---------- router: one page at a time, plain #name hashes ----------
 (function(){
-  const ORDER=[['home','الرئيسية'],['original','المسقط الأصلي'],['model','الموديل 3D'],['plan','المسقط بالعفش'],['changes','التعديلات'],['rooms','الغرف'],['materials','الخامات'],['notes','ملاحظات']];
+  const ORDER=[['home','الرئيسية'],['original','المسقط الأصلي'],['model','الموديل 3D'],['renders','صور واقعية'],['plan','المسقط بالعفش'],['changes','التعديلات'],['rooms','الغرف'],['materials','الخامات'],['notes','ملاحظات']];
   const views=Object.fromEntries([...document.querySelectorAll('[data-view]')].map(v=>[v.dataset.view,v]));
   const links=document.getElementById('navLinks'), burger=document.getElementById('burger');
   // pagers
@@ -614,6 +653,31 @@ const PALETTE = [
   burger.addEventListener('click',()=>{ const o=links.classList.toggle('open'); burger.setAttribute('aria-expanded',String(o)); });
   show(location.hash.slice(1)||'home',false);
   window.currentView=()=>current;
+  // ---------- renders gallery + lightbox ----------
+  const SHOTS=[
+    ['reception','الريسبشن','الانتريه جنب الشباك، وكنبة الـL على الشمال'],
+    ['reception_tv','ركنة التلفزيون','من ناحية الشباك: الكنبة L وحائط الشرائح'],
+    ['bedroom','غرفة النوم','السرير والتجليد من ناحية الباب'],
+    ['bedroom_wardrobe','الدولاب والتسريحة','من ناحية الشباك، والباب جنب حيطة المطبخ'],
+    ['kids','أوضة الأطفال','السريرين قصاد الدولاب وبينهم الكومودينو'],
+    ['kitchen','المطبخ','U مقفول، والتلاجة جنب المسقط'],
+    ['hall','الطرقة والمدخل','الكونسول على حيطة المطبخ وباب الريسبشن'],
+    ['bath','الحمام','البانيو على اليمين والتواليت تحت الشباك']];
+  const gal=document.getElementById('gallery');
+  if(gal){
+    gal.innerHTML=SHOTS.map((s,i)=>`<figure class="shot" tabindex="0" role="button" data-i="${i}" aria-label="كبّر صورة ${s[1]}"><img src="assets/renders/${s[0]}.webp" alt="${s[1]}: ${s[2]}" loading="lazy" width="1200" height="750"><figcaption><b>${s[1]}</b><span>${s[2]}</span></figcaption></figure>`).join('');
+    const lb=document.getElementById('lightbox'), img=document.getElementById('lbImg'), cap=document.getElementById('lbCap'); let li=0, lastFocus=null;
+    const open=i=>{ li=(i+SHOTS.length)%SHOTS.length; const s=SHOTS[li]; img.src=`assets/renders/${s[0]}.webp`; img.alt=s[1]; cap.innerHTML=`<b>${s[1]}</b>${s[2]} · <span class="num">${li+1}/${SHOTS.length}</span>`; if(lb.hidden){ lastFocus=document.activeElement; lb.hidden=false; document.getElementById('lbClose').focus(); } };
+    const close=()=>{ lb.hidden=true; lastFocus&&lastFocus.focus(); };
+    gal.addEventListener('click',e=>{ const f=e.target.closest('.shot'); if(f) open(+f.dataset.i); });
+    gal.addEventListener('keydown',e=>{ const f=e.target.closest('.shot'); if(f&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); open(+f.dataset.i);} });
+    document.getElementById('lbClose').onclick=close;
+    document.getElementById('lbPrev').onclick=()=>open(li-1); document.getElementById('lbNext').onclick=()=>open(li+1);
+    lb.addEventListener('click',e=>{ if(e.target===lb) close(); });
+    document.addEventListener('keydown',e=>{ if(lb.hidden) return; if(e.key==='Escape') close(); if(e.key==='ArrowLeft') open(li+1); if(e.key==='ArrowRight') open(li-1); });
+    let sx=null; lb.addEventListener('touchstart',e=>{ sx=e.touches[0].clientX; },{passive:true});
+    lb.addEventListener('touchend',e=>{ if(sx===null) return; const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>50) open(li+(dx>0?1:-1)); sx=null; });
+  }
   // ---------- hero hotspots: hover a room, click to walk into it ----------
   const HS=[{"id": "reception", "poly": [[0.2588, 0.3939], [0.5382, 0.4788], [0.6977, 0.1657], [0.4394, 0.0952]], "c": [0.4859, 0.2758]}, {"id": "bedroom", "poly": [[0.542, 0.48], [0.8021, 0.559], [0.9407, 0.2319], [0.7012, 0.1666]], "c": [0.7487, 0.3514]}, {"id": "kids", "poly": [[0.0638, 0.5733], [0.2914, 0.6474], [0.4053, 0.4417], [0.1881, 0.3757]], "c": [0.2378, 0.5063]}, {"id": "kitchen", "poly": [[0.524, 0.7286], [0.6293, 0.7629], [0.6563, 0.7025], [0.7311, 0.7264], [0.8008, 0.562], [0.6288, 0.5097]], "c": [0.6655, 0.6434]}, {"id": "hall", "poly": [[0.2954, 0.6487], [0.518, 0.7212], [0.621, 0.5074], [0.409, 0.4429]], "c": [0.4614, 0.5766]}, {"id": "bath", "poly": [[0.4399, 0.8979], [0.6306, 0.9634], [0.7037, 0.7911], [0.5199, 0.7311]], "c": [0.5736, 0.8438]}, {"id": "lobby", "poly": [[0.3418, 0.8642], [0.4356, 0.8964], [0.5158, 0.7298], [0.4253, 0.7002]], "c": [0.4303, 0.7958]}, {"id": "balcony", "poly": [[0.1898, 0.3729], [0.2551, 0.3928], [0.436, 0.0943], [0.3754, 0.0778]], "c": [0.3182, 0.2276]}], NAMES=Object.fromEntries(window.APT.rooms.map(r=>[r.id,r.name]));
   const svg=document.getElementById('hotspots'), lab=document.getElementById('hsLabel'), art=svg&&svg.closest('.hero-art');
@@ -724,6 +788,7 @@ Object.assign(MAT,{
   ceiling: new THREE.MeshStandardMaterial({color:'#F7F4EF',roughness:1,side:THREE.BackSide})
 });
 const books=['#7D8158','#B8924F','#A9784A','#E6DCCB','#3A3633','#9FB7C9','#C49A6C'].map(c=>std(c));
+for(const k in MAT) MAT[k].name=k; books.forEach((m,i)=>m.name='book'+i);
 
 // ---------- helpers: plan(mm) -> world ----------
 const root = new THREE.Group(); scene.add(root);
@@ -1013,6 +1078,10 @@ function onHide(){ renderer.setAnimationLoop(null); }
 if(HEROSHOT){ document.body.appendChild(viewer); document.querySelectorAll('header,main,footer').forEach(e=>e.style.display='none'); viewer.style.cssText='position:fixed;inset:0;height:auto;max-height:none;min-height:0;border:0;border-radius:0;background:transparent;z-index:999'; document.body.style.background='transparent'; scene.background=null; renderer.setClearColor(0x000000,0); labels.forEach(l=>l.visible=false); state.labels=false; scene.getObjectByName('slab').visible=false; document.querySelectorAll('.v-top,.v-bottom').forEach(e=>e.style.display='none'); }
 function enterRoom(id){ state.inside=true; setPressed('btnInside',true); state.top=false; setPressed('btnTop',false); requestAnimationFrame(()=>selectRoom(id)); }
 window.__three={state,selectRoom,applyView,camera,controls,onShow,onHide,scene,renderer,THREE,enterRoom};
+window.__three.exportGLB=async()=>{ state.cut=false; state.inside=true; applyWalls(); ceil.visible=true; scene.updateMatrixWorld(true);
+  const {GLTFExporter}=await import('three/addons/exporters/GLTFExporter.js');
+  const buf=await new Promise((res,rej)=>new GLTFExporter().parse(root,res,rej,{binary:true,onlyVisible:true}));
+  let s=''; const u=new Uint8Array(buf); for(let i=0;i<u.length;i+=0x8000) s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000)); return btoa(s); };
 if(window.__pendingRoom){ const r=window.__pendingRoom; window.__pendingRoom=null; enterRoom(r); }
 if(window.currentView && window.currentView()==='model') onShow();
 </script>

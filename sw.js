@@ -1,5 +1,5 @@
 // Offline support: the page and its icons are precached; three.js and fonts are cached the first time they load.
-const VERSION = 'apt-v7';
+const VERSION = 'apt-v8';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png', './assets/hero.webp'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
