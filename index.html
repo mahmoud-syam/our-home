@@ -204,6 +204,28 @@ main{flex:1}
 .notes li{margin:.4rem 0;max-width:80ch}
 
 
+
+/* ---------- 360 viewer ---------- */
+.pano-block{margin-bottom:34px}
+.pano-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.pano-head h3{font-family:var(--display);font-size:1.4rem}
+.pano-head .chip{border-color:var(--line)}
+.sub-h{font-family:var(--display);font-size:1.4rem;margin:0 0 12px}
+.pano{position:relative;height:min(68vh,640px);min-height:380px;border-radius:16px;overflow:hidden;background:#1d1a16;cursor:grab;touch-action:none;user-select:none}
+.pano.grabbing{cursor:grabbing}
+.pano canvas{display:block;width:100%;height:100%}
+.pano:fullscreen{border-radius:0;height:100vh}
+.pano-fade{position:absolute;inset:0;background:#1d1a16;display:grid;place-items:center;color:#cfc6b9;font-size:.95rem;opacity:1;transition:opacity .45s ease;pointer-events:none;z-index:3}
+.pano-fade.off{opacity:0}
+.pano-ui{position:absolute;inset-inline:12px;bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:8px;z-index:4;pointer-events:none}
+.pano-ui>*{pointer-events:auto}
+.pano-hint{font-size:.8rem;color:#fff;background:rgba(20,17,13,.55);padding:5px 12px;border-radius:999px;backdrop-filter:blur(6px)}
+.pano-hs{position:absolute;inset:0;pointer-events:none;z-index:2}
+.hs-dot{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;background:none;border:0;padding:0;display:flex;flex-direction:column;align-items:center;gap:6px;color:#fff;font:600 .85rem var(--body)}
+.hs-dot i{width:34px;height:34px;border-radius:50%;background:rgba(255,248,232,.25);border:2px solid #FFF8E8;box-shadow:0 0 0 0 rgba(255,248,232,.6);animation:ring 2s ease-out infinite;display:block}
+.hs-dot span{background:rgba(20,17,13,.7);padding:3px 10px;border-radius:999px;white-space:nowrap}
+.hs-dot:hover i,.hs-dot:focus-visible i{background:rgba(255,248,232,.6)}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(255,248,232,.55)}100%{box-shadow:0 0 0 16px rgba(255,248,232,0)}}
 /* ---------- renders gallery ---------- */
 .gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .shot{margin:0;position:relative;border-radius:16px;overflow:hidden;background:var(--panel);border:1px solid var(--line);cursor:zoom-in}
@@ -316,6 +338,15 @@ footer .wrap{display:flex;justify-content:center;text-align:center;gap:12px;flex
   <section class="view page" data-view="renders" hidden aria-labelledby="h-renders">
     <div class="wrap">
       <div class="page-head"><span class="step">03</span><h2 id="h-renders">واقعي</h2><p>لقطات من جوه كل أوضة بإضاءة الشمس من الشبابيك ولمبات السقف، وخامات حقيقية: خشب، قماش، بورسلين ورخام. دوس على أي صورة عشان تكبّرها.</p></div>
+      <div class="pano-block">
+        <div class="pano-head"><h3>جولة 360°</h3><div class="chips" id="panoChips" role="toolbar" aria-label="اختيار المكان"></div></div>
+        <div class="pano" id="pano">
+          <div class="pano-hs" id="panoHs"></div>
+          <div class="pano-fade" id="panoFade"><span>جاري التحميل…</span></div>
+          <div class="pano-ui"><span class="pano-hint">اسحب عشان تلف · دوس على الدواير عشان تتنقل</span><button class="tbtn" id="panoFs">ملء الشاشة</button></div>
+        </div>
+      </div>
+      <h3 class="sub-h">لقطات</h3>
       <div class="gallery" id="gallery"></div>
       <nav class="pager" aria-label="التنقل"></nav>
     </div>
@@ -1084,6 +1115,77 @@ window.__three.exportGLB=async()=>{ state.cut=false; state.inside=true; applyWal
   let s=''; const u=new Uint8Array(buf); for(let i=0;i<u.length;i+=0x8000) s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000)); return btoa(s); };
 if(window.__pendingRoom){ const r=window.__pendingRoom; window.__pendingRoom=null; enterRoom(r); }
 if(window.currentView && window.currentView()==='model') onShow();
+</script>
+<script type="module">
+// ---------- 360 tour: equirect renders, north = image centre, east = right ----------
+import * as THREE from 'three';
+const PANOS = {
+  reception:{name:'الريسبشن', pos:[2900,8750], yaw:-15, links:[['hall',4130,6000]]},
+  hall:{name:'الطرقة', pos:[4350,4100], yaw:40, links:[['reception',4130,5975],['bedroom',5370,5975],['kids',3025,5450],['kitchen',5870,2930],['bath',5250,2455]]},
+  kitchen:{name:'المطبخ', pos:[6900,4300], yaw:-10, fov:88, links:[['hall',5870,2930]]},
+  bedroom:{name:'غرفة النوم', pos:[6300,7900], yaw:-45, links:[['hall',5370,6000]]},
+  kids:{name:'أوضة الأطفال', pos:[1525,4900], yaw:185, links:[['hall',3025,5450]]},
+  bath:{name:'الحمام', pos:[6800,1350], yaw:150, fov:88, links:[['hall',5865,1965]]}
+};
+const box=document.getElementById('pano'), hsBox=document.getElementById('panoHs'), fade=document.getElementById('panoFade'), chips=document.getElementById('panoChips');
+const view=document.querySelector('[data-view="renders"]');
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let renderer, scene, camera, started=false, running=false, current=null, lon=0, lat=0, fov=75, auto=true, idleT=0;
+const cache={};
+chips.innerHTML=Object.entries(PANOS).map(([id,p])=>`<button class="chip" data-p="${id}" aria-pressed="false">${p.name}</button>`).join('');
+chips.addEventListener('click',e=>{ const b=e.target.closest('[data-p]'); if(b) go(b.dataset.p); });
+function init(){
+  started=true;
+  renderer=new THREE.WebGLRenderer({antialias:true}); renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.outputColorSpace=THREE.SRGBColorSpace;
+  box.prepend(renderer.domElement);
+  scene=new THREE.Scene(); camera=new THREE.PerspectiveCamera(fov,1,0.1,100);
+  new ResizeObserver(size).observe(box); size();
+  bind(); go('reception');
+}
+function size(){ const w=box.clientWidth,h=box.clientHeight; if(!w||!h) return; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
+function load(id){ if(cache[id]) return cache[id]; cache[id]=new Promise((res,rej)=>new THREE.TextureLoader().load(`assets/panos/${id}.webp`,tx=>{ tx.mapping=THREE.EquirectangularReflectionMapping; tx.colorSpace=THREE.SRGBColorSpace; tx.anisotropy=8; res(tx); },undefined,rej)); return cache[id]; }
+async function go(id){
+  if(id===current) return; fade.classList.remove('off');
+  chips.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',String(c.dataset.p===id)));
+  const tx=await load(id).catch(()=>null); if(!tx){ fade.querySelector('span').textContent='الصورة مش متاحة دلوقتي'; return; }
+  current=id; scene.background=tx; lon=PANOS[id].yaw; lat=-4; fov=PANOS[id].fov||75; camera.fov=fov; camera.updateProjectionMatrix(); auto=!RM;
+  buildHotspots(); setTimeout(()=>fade.classList.add('off'),60);
+  // warm up neighbours
+  PANOS[id].links.forEach(l=>load(l[0]));
+}
+let hs=[];
+function buildHotspots(){
+  const p=PANOS[current]; hsBox.innerHTML='';
+  hs=p.links.map(([to,x,y])=>{ const b=document.createElement('button'); b.className='hs-dot'; b.innerHTML=`<i></i><span>${PANOS[to].name}</span>`; b.setAttribute('aria-label','روح '+PANOS[to].name);
+    b.addEventListener('click',e=>{ e.stopPropagation(); go(to); }); hsBox.appendChild(b);
+    const dx=(x-p.pos[0])/1000, dy=(y-p.pos[1])/1000; return {el:b, v:new THREE.Vector3(dy,-0.45,dx)}; });
+}
+const tmp=new THREE.Vector3();
+function frame(){
+  if(auto) lon+=0.03;
+  lat=Math.max(-80,Math.min(80,lat));
+  const phi=THREE.MathUtils.degToRad(lat), th=THREE.MathUtils.degToRad(lon);
+  camera.lookAt(Math.cos(phi)*Math.cos(th), Math.sin(phi), Math.cos(phi)*Math.sin(th));
+  renderer.render(scene,camera);
+  const w=box.clientWidth,h=box.clientHeight;
+  for(const s of hs){ tmp.copy(s.v).project(camera); const vis=tmp.z<1 && Math.abs(tmp.x)<1.2 && Math.abs(tmp.y)<1.2; s.el.style.display=vis?'flex':'none'; if(vis){ s.el.style.left=((tmp.x+1)/2*w)+'px'; s.el.style.top=((1-tmp.y)/2*h)+'px'; } }
+}
+function bind(){
+  const pts=new Map(); let last=null, pinch=0;
+  box.addEventListener('pointerdown',e=>{ if(e.target.closest('.hs-dot,.pano-ui')) return; box.setPointerCapture(e.pointerId); pts.set(e.pointerId,[e.clientX,e.clientY]); auto=false; box.classList.add('grabbing'); if(pts.size===2){ const [a,b]=[...pts.values()]; pinch=Math.hypot(a[0]-b[0],a[1]-b[1]); } });
+  box.addEventListener('pointermove',e=>{ if(!pts.has(e.pointerId)) return; const prev=pts.get(e.pointerId); pts.set(e.pointerId,[e.clientX,e.clientY]);
+    if(pts.size===1){ const k=fov/box.clientHeight; lon-=(e.clientX-prev[0])*k; lat+=(e.clientY-prev[1])*k; }
+    else if(pts.size===2){ const [a,b]=[...pts.values()]; const d=Math.hypot(a[0]-b[0],a[1]-b[1]); if(pinch){ setFov(fov*pinch/d); } pinch=d; } });
+  const up=e=>{ pts.delete(e.pointerId); if(!pts.size) box.classList.remove('grabbing'); pinch=0; };
+  box.addEventListener('pointerup',up); box.addEventListener('pointercancel',up);
+  box.addEventListener('wheel',e=>{ e.preventDefault(); auto=false; setFov(fov+e.deltaY*0.04); },{passive:false});
+  box.addEventListener('keydown',e=>{ const m={ArrowLeft:[-5,0],ArrowRight:[5,0],ArrowUp:[0,5],ArrowDown:[0,-5]}[e.key]; if(m){ e.preventDefault(); auto=false; lon+=m[0]; lat+=m[1]; } });
+  box.tabIndex=0; box.setAttribute('aria-label','عارض 360: استخدم الأسهم عشان تلف');
+  document.getElementById('panoFs').addEventListener('click',()=>{ try{ if(document.fullscreenElement) document.exitFullscreen(); else box.requestFullscreen?.().catch(()=>{}); }catch(e){} });
+}
+function setFov(v){ fov=Math.max(35,Math.min(95,v)); camera.fov=fov; camera.updateProjectionMatrix(); }
+function sync(){ const on=!view.hidden; if(on && !started) init(); if(!started) return; if(on && !running){ running=true; renderer.setAnimationLoop(frame); size(); } else if(!on && running){ running=false; renderer.setAnimationLoop(null); } }
+new MutationObserver(sync).observe(view,{attributes:true,attributeFilter:['hidden']}); sync();
 </script>
 <script>
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
